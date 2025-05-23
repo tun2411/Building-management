@@ -9,6 +9,7 @@ public interface AssignmentBuildingRepository extends JpaRepository<AssignmentBu
 
     void deleteByBuildingId(Long id);
     List<AssignmentBuildingEntity> findByBuildingId(Long buildingId);
+    List<AssignmentBuildingEntity> findByBuildingIdIn(List<Long> ids);
     void deleteByBuilding_Id(Long id);
 
 

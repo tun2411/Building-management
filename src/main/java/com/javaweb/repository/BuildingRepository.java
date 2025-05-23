@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BuildingRepository extends JpaRepository<BuildingEntity, Long>, BuildingRepositoryCustom {
     List<BuildingEntity> findByNameContaining(String keySearch);
-
+    void deleteAllByIdIn(List<Long> ids);
 
 
 

@@ -70,16 +70,14 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public String delete(List<Long> ids) {
-        for(Long id:ids) {
-            BuildingEntity buildingEntity = buildingRepository.findById(id).get();
-            //if(buildingEntity != null) {
-                List<RentAreaEntity> rentAreaEntities = buildingEntity.getRentAreaEntity();
-                rentAreaRepository.deleteAll(rentAreaEntities);
-                List<AssignmentBuildingEntity> assignmentBuildingEntities = buildingEntity.getBuildingUserEntities();
-                assignmentBuildingRepository.deleteAll(assignmentBuildingEntities);
-                buildingRepository.delete(buildingEntity);
-           // }
-        }
+        List<RentAreaEntity> rentAreas = rentAreaRepository.findByBuildingIdIn(ids);
+        rentAreaRepository.deleteAll(rentAreas);
+
+        List<AssignmentBuildingEntity> assignments = assignmentBuildingRepository.findByBuildingIdIn(ids);
+        assignmentBuildingRepository.deleteAll(assignments);
+
+        buildingRepository.deleteAllByIdIn(ids);
+
         return "Success";
     }
 

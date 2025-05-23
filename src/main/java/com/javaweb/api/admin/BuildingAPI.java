@@ -41,7 +41,7 @@ public class BuildingAPI {
 //            responseDTO.setMessage("Internal server Error");
 //            responseDTO.setDetail(e.getMessage());
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
-//        }
+//        }abc
         BuildingEntity buildingEntity = buildingService.createBuilding(buildingDTO);
         System.out.println("OK");
         responseDTO.setMessage("Create Building Completed");

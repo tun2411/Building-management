@@ -256,11 +256,11 @@
             <tr>
               <th class="center">
                 <label class="pos-rel">
-                  <input
-                          type="checkbox"
-                          class="ace"
-                          value="1"
-                  />
+<%--                  <input--%>
+<%--                          type="checkbox"--%>
+<%--                          class="ace"--%>
+<%--                          value="1"--%>
+<%--                  />--%>
                   <span class="lbl"></span>
                 </label>
               </th>
@@ -492,7 +492,7 @@
     }
 
     function deleteBuilding(id) {
-      if (id == "") {
+      if (id === "") {
         alert("Id not found");
       } else {
         deleteBuildings(id);

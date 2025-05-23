@@ -325,8 +325,9 @@
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
-                console.log("Success");
                 alert(response.message);
+                console.log("Success");
+                window.location.href = "/admin/building-list";
             },
             error: function (response) {
                 alert(response.data.join('\n'));
@@ -342,8 +343,9 @@
             dataType: "json",
             contentType: "application/json",
             success: function (response) {
-                console.log("Success");
                 alert(response.message);
+                console.log("Success");
+                window.location.href = "/admin/building-list";
             },
             error: function (response) {
                 console.log("Failed");
