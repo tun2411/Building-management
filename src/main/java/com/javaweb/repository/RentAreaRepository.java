@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface RentAreaRepository extends JpaRepository<RentAreaEntity, Long> {
-    List<RentAreaEntity> findByBuildingIdIn(List<Long> ids);
+    //List<RentAreaEntity> findByBuildingIdIn(List<Long> ids);
+    List<RentAreaEntity> findByBuildingEntity_IdIn(List<Long> ids);
+
+
 }
