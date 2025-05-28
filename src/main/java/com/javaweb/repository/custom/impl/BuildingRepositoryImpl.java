@@ -96,7 +96,6 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     }
 
 
-
     @Override
     public List<BuildingEntity> searchBuildings(BuildingSearchRequest buildingSearchRequest) {
         StringBuilder sql = new StringBuilder("SELECT DISTINCT b.* FROM building b ");
