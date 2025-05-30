@@ -223,6 +223,33 @@
                         </div>
                     </div>
                     <div class="form-group" bis_skin_checked="1">
+                        <label class="col-xs-3 control-label">Hình đại diện</label>
+                        <div class="col-xs-6">
+                            <input class="col-xs-6" type="file" id="uploadImage"/>
+                        </div>
+                    </div>
+                    <div class="form-group" bis_skin_checked="1">
+                        <div style="margin-left: 355px" class="col-sm-9" bis_skin_checked="1">
+                            <c:if test="${not empty buildingEdit.avatar}">
+                                <c:set var="imagePath" value="/repository${buildingEdit.avatar}"/>
+                                <img src="${imagePath}" id="viewImage" width="200px" height="200px" style="margin-top: 50px">
+                            </c:if>
+                            <c:if test="${empty buildingEdit.avatar}">
+                                <img src="/admin/image/default.png" id="viewImage" width="200px" height="200px">
+                            </c:if>
+                        </div>
+                    </div>
+                    <div class="form-group" bis_skin_checked="1">
+                        <div style="margin-left: 18px" class="col-xs-9 col-xs-push-3">
+                            <input type="button" class="btn btn-md btn-primary"
+                                   value="Thêm" id="submitBtn"/>
+                            <input type="button" class="btn btn-md btn-warning"
+                                   value=" Huỷ " id="cancelBtn"/>
+                            <img src="/img/loading.gif" style="display: none; height: 100px" id="loading_image">
+                        </div>
+                    </div>
+
+                    <div class="form-group" bis_skin_checked="1">
                         <label class="col-xs-3 control-label"></label>
                         <div class="col-xs-9">
                             <c:if test="${not empty buildingEdit.id}">
@@ -353,6 +380,112 @@
             },
         });
     }
+
+    var imageBase64 = '';
+    var imageName = '';
+
+    $("#submitBtn").click(function () {
+        var data = {};
+        var formData = $("#form-edit").serializeArray();
+        $.each(formData, function (i, e) {
+            if ('' !== e.value && null != e.value) {
+                data['' + e.name + ''] = e.value;
+            }
+
+            if ('' !== imageBase64) {
+                data['imageBase64'] = imageBase64;
+                data['imageName'] = imageName;
+            }
+        });
+        data['id'] = $('#id').val();
+        var buildingId = data['id'];
+
+        $('#loading_image').show();
+
+        $.ajax({
+            type: "POST",
+            url: "/api/buildings",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (res) {
+                $('#loading_image').hide();
+                showMessageConfirmation("Thành công", "Thao tác thành công!", "success", "/admin/building-edit-" + res.id);
+            },
+            error: function () {
+                $('#loading_image').hide();
+                var redirectUrl = (null === buildingId) ? "" : "/admin/building-edit-" + {buildingId};
+                showMessageConfirmation("Thất bại", "Đã có lỗi xảy ra! Vui lòng kiểm tra lại.", "warning", redirectUrl);
+            }
+        });
+    });
+    $("#cancelBtn").click(function () {
+        showAlertBeforeCancelForm(function() {
+            window.location.href = '/admin/building-list';
+        })
+    });
+
+    $('#uploadImage').change(function (event) {
+        var reader = new FileReader();
+        var file = $(this)[0].files[0];
+        reader.onload = function(e){
+            imageBase64 = e.target.result;
+            imageName = file.name; // ten hinh khong dau, khoang cach. vd: a-b-c
+        };
+        reader.readAsDataURL(file);
+        openImage(this, "viewImage");
+    });
+
+    function openImage(input, imageView) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#' +imageView).attr('src', reader.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function showMessageConfirmation(title, message, type, redirectUrl) {
+        var statusBtn = ('success' === type) ? 'success' : 'danger';
+
+        swal({
+            title: title,
+            text: message,
+            type: type,
+            showConfirmButton: true,
+            confirmButtonText: "Xác nhận",
+            confirmButtonClass: "btn btn-" + statusBtn,
+            allowOutsideClick: true
+        }).then(function(res) {
+            if (res.value) {
+                if ("" !== redirectUrl) {
+                    window.location.href = redirectUrl;
+                }
+            }
+        });
+    }
+
+    function showAlertBeforeCancelForm(callback) {
+        swal({
+            title: "Xác nhận đóng",
+            text: "Bạn có chắc chắn muốn đóng không?",
+            type: "warning",
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy bỏ",
+            confirmButtonClass: "btn btn-success",
+            cancelButtonClass: "btn btn-danger"
+        }).then(function (res) {
+            if(res.value){
+                callback();
+            } else if(res.dismiss === 'cancel'){
+                console.log('cancel');
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

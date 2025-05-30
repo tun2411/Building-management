@@ -13,13 +13,16 @@ import com.javaweb.repository.AssignmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.UserRepository;
+import com.javaweb.utils.*;
 import com.javaweb.service.BuildingService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +52,9 @@ public class BuildingServiceImpl implements BuildingService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+//    @Autowired
+//    private UploadFileUtils uploadFileUtils;
 
     @Override
     public List<BuildingSearchResponse> searchBuildings(BuildingSearchRequest buildingSearchRequest) {
@@ -115,6 +121,7 @@ public class BuildingServiceImpl implements BuildingService {
             areaEntity.setBuildingEntity(buildingEntity);
             rentAreaRepository.save(areaEntity);
         }
+        //saveThumbnail(buildingDTO, buildingEntity);
         return buildingEntity;
     }
 
@@ -133,6 +140,22 @@ public class BuildingServiceImpl implements BuildingService {
             areaEntity.setBuildingEntity(buildingEntity);
             rentAreaRepository.save(areaEntity);
         }
+        //saveThumbnail(buildingDTO, buildingEntity);
         return buildingEntity;
     }
+
+//    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+//        String path = "/building/" + buildingDTO.getImageName();
+//        if (null != buildingDTO.getImageBase64()) {
+//            if (null != buildingEntity.getAvatar()) {
+//                if (!path.equals(buildingEntity.getAvatar())) {
+//                    File file = new File("C://home/office" + buildingEntity.getAvatar());
+//                    file.delete();
+//                }
+//            }
+//            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+//            uploadFileUtils.writeOrUpdate(path, bytes);
+//            buildingEntity.setAvatar(path);
+//        }
+//    }
 }

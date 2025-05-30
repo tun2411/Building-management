@@ -19,10 +19,10 @@ public class AbstractDTO<T> implements Serializable {
     private String createdBy;
     private Date modifiedDate;
     private String modifiedBy;
-    private int maxPageItems = 2;
-    private int page = 1;
+    private Integer maxPageItems = 2;
+    private Integer page = 1;
     private List<T> listResult = new ArrayList<>();
-    private int totalItems = 0;
+    private Integer totalItems = 0;
     private String tableId = "tableList";
     private Integer limit;
     private Integer totalPage;

@@ -1,10 +1,52 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/common/taglib.jsp"%>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
 <html>
 <head>
 
   <title>Danh sách toà nhà</title>
+  <!-- Display Tag CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/displaytag/1.2/displaytag.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/displaytag/1.2/displaytag-print.css">
+  <!-- Display Tag JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/displaytag/1.2/displaytag.js"></script>
+  <style>
+    .pagination {
+      margin: 10px 0;
+    }
+    .pagination a {
+      padding: 5px 10px;
+      margin: 0 2px;
+      border: 1px solid #ddd;
+      text-decoration: none;
+      color: #333;
+    }
+    .pagination a:hover {
+      background-color: #f5f5f5;
+    }
+    .pagination .active {
+      background-color: #337ab7;
+      color: white;
+      border-color: #337ab7;
+    }
+    .sortable {
+      cursor: pointer;
+    }
+    .sortable:hover {
+      background-color: #f5f5f5;
+    }
+    .sortable:after {
+      content: '↕';
+      margin-left: 5px;
+    }
+    .sortable.asc:after {
+      content: '↑';
+    }
+    .sortable.desc:after {
+      content: '↓';
+    }
+  </style>
 
 </head>
 <body>
@@ -89,7 +131,6 @@
                           <form:select path="district" class="form-control">
                             <form:option value="">---Chọn Quận---</form:option>
                             <form:options items="${district}"/>
-
                           </form:select>
                         </div>
                         <div class="col-xs-5" bis_skin_checked="1">
@@ -154,7 +195,6 @@
                             <form:select path="staffId" class="form-control">
                                 <form:option value="">---Chọn Nhân Viên---</form:option>
                                 <form:options items="${staffs}"/>
-
                             </form:select>
                         </div>
                       </div>
@@ -177,6 +217,11 @@
                         </div>
                       </div>
                     </div>
+                    <!-- Hidden fields for pagination -->
+                    <form:hidden path="page" value="${model.page}"/>
+                    <form:hidden path="maxPageItems" value="${model.maxPageItems}"/>
+                    <form:hidden path="sortName" value="${model.sortName}"/>
+                    <form:hidden path="sortBy" value="${model.sortBy}"/>
                   </div>
                 </form:form>
 
@@ -207,7 +252,7 @@
                           d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1z"
                   />
                   <path
-                          d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
+                          d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
                   />
                 </svg>
               </button>
@@ -233,7 +278,7 @@
                         d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1z"
                 />
                 <path
-                        d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
+                        d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
                 />
               </svg>
             </button>
@@ -248,94 +293,44 @@
           <br>
           <div class="hr hr-20 hr-double"></div>
           <br>
-          <table
-                  id="buildingList"
-                  class="table table-striped table-bordered table-hover"
-          >
-            <thead>
-            <tr>
-              <th class="center">
-                <label class="pos-rel">
-<%--                  <input--%>
-<%--                          type="checkbox"--%>
-<%--                          class="ace"--%>
-<%--                          value="1"--%>
-<%--                  />--%>
-                  <span class="lbl"></span>
-                </label>
-              </th>
-              <th>Tên toà nhà</th>
-              <th>Địa chỉ</th>
-              <th>Số tầng hầm</th>
-
-              <th>Tên quản lý</th>
-              <th>SĐT quản lý</th>
-
-              <th>Diện tích sàn</th>
-              <th>Diện tích thuê</th>
-              <th>Diện tích trống</th>
-              <th>Giá thuê</th>
-              <th>Phí dịch vụ</th>
-              <th>Phí môi giới</th>
-              <th>Thao tác</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <c:forEach var = "building" items="${buildingSearchResponses}">
-              <tr>
-                <td class="center">
-                  <label class="pos-rel">
-                    <input type="checkbox" class="ace" value="${building.id}" />
-                    <span class="lbl"></span>
-                  </label>
-                </td>
-
-                <td>${building.name}</td>
-                <td>${building.address}</td>
-                <td>${building.numberOfBasement}</td>
-                <td>${building.managerName}</td>
-
-                <td>${building.managerPhone}</td>
-                <td>${building.floorArea}</td>
-                <td>${building.rentArea}</td>
-                <td></td>
-                <td>${building.rentPrice}</td>
-                <td>${building.serviceFee}</td>
-                <td>${building.brokerageFee}</td>
-
-                <td>
-                  <div
-                          class="hidden-sm hidden-xs btn-group"
-                          bis_skin_checked="1"
-                  >
-                    <button style="width: 24px;height: 24px;border:none"
-                            class="btn btn-xs btn-success"
-                            onclick="assignmentBuilding(${building.id})" title = "Giao toà nhà"
-                    >
-                      <i class="ace-icon fa fa-users bigger-120"></i>
-                    </button>
-                    <a href="/admin/building-edit-${building.id} " style="width: 24px;height: 24px;border:none"
-                       class="btn btn-xs btn-info" title="Sửa thông tin">
-                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+          <div class="table-responsive">
+            <display:table name="model.listResult" cellspacing="0" cellpadding="0"
+                          requestURI="${formUrl}" partialList="true" sort="external"
+                          size="${model.totalItems}" defaultsort="2" defaultorder="ascending"
+                          id="tableList" pagesize="${model.maxPageItems}"
+                          export="false"
+                          class="table table-fcv-ace table-striped table-bordered table-hover dataTable no-footer"
+                          style="margin: 3em 0 1.5em;">
+                <display:column title="<fieldset class='form-group'>
+                                    <input type='checkbox' id='checkAll' class='check-box-element'>
+                                    </fieldset>" class="center select-cell"
+                                headerClass="center select-cell">
+                    <fieldset>
+                        <input type="checkbox" name="checkList" value="${tableList.id}"
+                               id="checkbox_${tableList.id}" class="check-box-element"/>
+                    </fieldset>
+                </display:column>
+                <display:column headerClass="text-left" property="name" title="Tên toà nhà"/>
+                <display:column headerClass="text-left" property="floorArea" title="Diện tích sàn"/>
+                <display:column headerClass="text-left" property="district" title="Quận"/>
+                <display:column headerClass="text-left" property="ward" title="Phường"/>
+                <display:column headerClass="text-left" property="street" title="Đường"/>
+                <display:column headerClass="text-left" property="numberOfBasement" title="Số tầng hầm"/>
+                <display:column headerClass="text-left" property="direction" title="Hướng"/>
+                <display:column headerClass="text-left" property="level" title="Hạng"/>
+                <display:column headerClass="text-left" property="rentArea" title="Diện tích thuê"/>
+                <display:column headerClass="text-left" property="rentPrice" title="Giá thuê"/>
+                <display:column headerClass="text-left" property="managerName" title="Tên quản lý"/>
+                <display:column headerClass="text-left" property="managerPhone" title="SĐT quản lý"/>
+                <display:column headerClass="col-actions" title="Thao tác">
+                    <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
+                       title="Cập nhật toà nhà"
+                       href='<c:url value="/admin/building-edit-${tableList.id}"/>'>
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                     </a>
-
-                      <button style="width: 24px;height: 24px;border:none"
-                              class="btn btn-xs btn-danger"
-                              onclick="deleteBuilding(${building.id})" title="Xoá toà nhà"
-                      >
-                        <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                      </button>
-
-
-
-                  </div>
-                </td>
-              </tr>
-            </c:forEach>
-
-            </tbody>
-          </table>
+                </display:column>
+            </display:table>
+          </div>
         </div>
         <!-- /.span -->
       </div>
@@ -430,7 +425,6 @@
         },
         error: function (response) {
           console.log("Failed");
-          //console.log(url);
         },
       });
     }
@@ -456,7 +450,7 @@
 
     $("#btnDeleteBuilding").click(function (e) {
       e.preventDefault();
-      var buildingIds = $("#buildingList")
+      var buildingIds = $("#tableList")
               .find("tbody input[type = checkbox]:checked")
               .map(function () {
                 return $(this).val();
@@ -471,13 +465,10 @@
     });
 
     function deleteBuildings(ids) {
-      //Gui request xuong sever => ajax
       $.ajax({
         type: "DELETE",
         url: "/api/buildings/" + ids,
-        //data: JSON.stringify(json),
         dataType: "json",
-        //contentType: "application/json",
         success: function (response) {
           console.log("Success");
           alert(response.message);
@@ -485,7 +476,6 @@
         },
         error: function (response) {
           console.log("Failed");
-          //console.log(url);
           alert(response.message);
         },
       });
@@ -500,7 +490,6 @@
     }
 
     function assignBuilding(json) {
-      //Gui request xuong sever => ajax
       $.ajax({
         type: "POST",
         url: "/api/assign",
@@ -520,9 +509,36 @@
 
     $("#btnSearchBuilding").click(function (e){
       e.preventDefault();
+      // Reset page to 1 when searching
+      $("#page").val(1);
       $("#listForm").submit();
-    })
+    });
 
+    // Handle sorting
+    $(".sortable").click(function() {
+      var currentSort = $("#sortBy").val();
+      var currentSortName = $("#sortName").val();
+      var newSortName = $(this).data("sort");
+      
+      if (currentSortName === newSortName) {
+        // Toggle sort direction
+        $("#sortBy").val(currentSort === "asc" ? "desc" : "asc");
+      } else {
+        // Set new sort column and default to ascending
+        $("#sortName").val(newSortName);
+        $("#sortBy").val("asc");
+      }
+      
+      $("#listForm").submit();
+    });
+
+    // Handle pagination
+    $(".pagination a").click(function(e) {
+      e.preventDefault();
+      var page = $(this).data("page");
+      $("#page").val(page);
+      $("#listForm").submit();
+    });
   </script>
 
 </body>

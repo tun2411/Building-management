@@ -1,5 +1,6 @@
 package com.javaweb.model.dto;
 
+import com.javaweb.model.response.BuildingSearchResponse;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +14,7 @@ import java.util.Map;
 
 @Setter
 @Getter
-public class BuildingDTO extends AbstractDTO{
-    //private Long id;
+public class BuildingDTO extends AbstractDTO<BuildingSearchResponse> {
     @NotBlank(message = "Building name not be blank!")
     private String name;
     private String street;
@@ -48,12 +48,10 @@ public class BuildingDTO extends AbstractDTO{
     private Long rentPrice;
     private String serviceFee;
     private Float brokerageFee;
-    private String image;
+    private String avatar;
     private String imageBase64;
     private String imageName;
-
     private Map<String,String> buildingDTOs = new HashMap<>();
-
 
     public String getImageBase64() {
         if (imageBase64 != null) {
@@ -61,10 +59,4 @@ public class BuildingDTO extends AbstractDTO{
         }
         return null;
     }
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
-    }
-
-
-
 }

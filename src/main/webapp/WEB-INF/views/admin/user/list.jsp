@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div    class="row">
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     <display:table name="model.listResult" cellspacing="0" cellpadding="0"

@@ -1,7 +1,6 @@
 package com.javaweb.controller.admin;
 
-
-
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.enums.District;
 import com.javaweb.enums.RentType;
 import com.javaweb.model.dto.BuildingDTO;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +29,42 @@ public class BuildingController {
     private IUserService userService;
 
     @GetMapping("/admin/building-list")
-    public ModelAndView getAllBuilding(@ModelAttribute BuildingSearchRequest buildingSearchRequest){
+    public ModelAndView getAllBuilding(@ModelAttribute BuildingSearchRequest buildingSearchRequest, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView("admin/building/list");
-        modelAndView.addObject("modelSearch",buildingSearchRequest);
-        modelAndView.addObject("staffs",userService.getStaffs());
+        BuildingDTO model = new BuildingDTO();
+        
+        // Set default values for pagination
+        if (buildingSearchRequest.getPage() == null) {
+            buildingSearchRequest.setPage(1);
+        }
+        if (buildingSearchRequest.getMaxPageItems() == null) {
+            buildingSearchRequest.setMaxPageItems(5);
+        }
+        
+        // Get total items and list result
+        List<BuildingSearchResponse> responseList = buildingService.searchBuildings(buildingSearchRequest);
+        int totalItems = responseList.size();
+        
+        // Calculate start and end index for current page
+        int startIndex = (buildingSearchRequest.getPage() - 1) * buildingSearchRequest.getMaxPageItems();
+        int endIndex = Math.min(startIndex + buildingSearchRequest.getMaxPageItems(), totalItems);
+        
+        // Get sublist for current page
+        List<BuildingSearchResponse> pageList = responseList.subList(startIndex, endIndex);
+        
+        // Set model attributes
+        model.setListResult(pageList);
+        model.setTotalItems(totalItems);
+        model.setMaxPageItems(buildingSearchRequest.getMaxPageItems());
+        model.setPage(buildingSearchRequest.getPage());
+        
+        // Add to modelAndView
+        modelAndView.addObject("model", model);
+        modelAndView.addObject("modelSearch", buildingSearchRequest);
+        modelAndView.addObject("staffs", userService.getStaffs());
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
-        List<BuildingSearchResponse> responseList1 = buildingService.searchBuildings(buildingSearchRequest);
-        modelAndView.addObject("buildingSearchResponses",responseList1);
+        modelAndView.addObject("formUrl", request.getRequestURI());
 
         return modelAndView;
     }
@@ -53,6 +81,7 @@ public class BuildingController {
         ModelAndView modelAndView = new ModelAndView("admin/building/edit");
         modelAndView.addObject("buildingEdit",buildingDTO);
         modelAndView.addObject("district", District.getDistrict());
+        modelAndView.addObject(SystemConstant.BUTTON, "Thêm");
         modelAndView.addObject("type", RentType.getType());
         return modelAndView;
     }
@@ -62,6 +91,7 @@ public class BuildingController {
         ModelAndView modelAndView = new ModelAndView("admin/building/edit");
         BuildingDTO buildingDTO = buildingService.findBuildingById(id);
         modelAndView.addObject("buildingEdit",buildingDTO);
+        modelAndView.addObject(SystemConstant.BUTTON, "Chỉnh sửa");
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
         return modelAndView;
