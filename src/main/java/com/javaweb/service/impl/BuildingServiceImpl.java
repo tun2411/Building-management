@@ -76,14 +76,7 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public String delete(List<Long> ids) {
-        List<RentAreaEntity> rentAreas = rentAreaRepository.findByBuildingEntity_IdIn(ids);
-        rentAreaRepository.deleteAll(rentAreas);
-
-        List<AssignmentBuildingEntity> assignments = assignmentBuildingRepository.findByBuildingIdIn(ids);
-        assignmentBuildingRepository.deleteAll(assignments);
-
         buildingRepository.deleteAllByIdIn(ids);
-
         return "Success";
     }
 
@@ -110,38 +103,39 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public BuildingEntity createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
-        buildingRepository.save(buildingEntity);
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
+        List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
         for(Long rentArea : rentAreas){
             RentAreaEntity areaEntity = new RentAreaEntity();
             areaEntity.setValue(rentArea);
             areaEntity.setBuildingEntity(buildingEntity);
-            rentAreaRepository.save(areaEntity);
+            rentAreaEntities.add(areaEntity);
         }
-        //saveThumbnail(buildingDTO, buildingEntity);
-        return buildingEntity;
+        buildingEntity.setRentAreaEntity(rentAreaEntities);
+        return buildingRepository.save(buildingEntity);
     }
+
 
     @Override
     public BuildingEntity updateBuilding(BuildingDTO buildingDTO){
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
-        buildingRepository.save(buildingEntity);
-        rentAreaRepository.deleteAll(buildingEntity.getRentAreaEntity());
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
+
+        List<RentAreaEntity> rentAreaEntities = new ArrayList<>();
         for(Long rentArea : rentAreas){
             RentAreaEntity areaEntity = new RentAreaEntity();
             areaEntity.setValue(rentArea);
             areaEntity.setBuildingEntity(buildingEntity);
-            rentAreaRepository.save(areaEntity);
+            rentAreaEntities.add(areaEntity);
         }
-        //saveThumbnail(buildingDTO, buildingEntity);
-        return buildingEntity;
+        buildingEntity.setRentAreaEntity(rentAreaEntities);
+        return buildingRepository.save(buildingEntity);
     }
 
 //    private void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {

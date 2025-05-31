@@ -2,7 +2,7 @@ package com.javaweb.service.impl;
 
 import com.javaweb.entity.AssignmentBuildingEntity;
 import com.javaweb.entity.BuildingEntity;
-import com.javaweb.entity.RentAreaEntity;
+import com.javaweb.entity.UserEntity;
 import com.javaweb.model.dto.AssignmentBuildingDTO;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.repository.AssignmentBuildingRepository;
@@ -33,14 +33,13 @@ public class AssignmentBuildingServiceImpl implements AssignmentBuildingService 
 
     @Override
     public String updateAssignment(AssignmentBuildingDTO assignmentBuildingDTO) {
-        assignmentBuildingRepository.deleteByBuilding_Id(assignmentBuildingDTO.getBuildingId());
-        List<Long> assigns = assignmentBuildingDTO.getStaffs();
-        for(Long assign : assigns){
-            AssignmentBuildingEntity assignmentBuildingEntity = new AssignmentBuildingEntity();
-            assignmentBuildingEntity.setBuilding(buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get());
-            assignmentBuildingEntity.setStaff(userRepository.findById(assign).get());
-            assignmentBuildingRepository.save(assignmentBuildingEntity);
+        BuildingEntity building = buildingRepository.findById(assignmentBuildingDTO.getBuildingId()).get();
+        building.getUsers().clear();
+        for (Long staffId : assignmentBuildingDTO.getStaffs()) {
+            UserEntity staff = userRepository.findById(staffId).get();
+            building.getUsers().add(staff);
         }
+        buildingRepository.save(building);
         return "Success";
     }
 

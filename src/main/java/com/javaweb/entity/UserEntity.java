@@ -41,31 +41,15 @@ public class UserEntity extends BaseEntity {
 //            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
 //    private List<RoleEntity> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "userEntity")
-    @JsonManagedReference
-    private List<UserRoleEntity> userRoleEntity;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "staff")
-    @JsonManagedReference
-    private List<AssignmentBuildingEntity> userBuildingEntities;
+    @ManyToMany(mappedBy = "users",fetch = FetchType.LAZY)
+    private List<BuildingEntity> buildingEntities;
 
-    public List<RoleEntity> getRoles() {
-        List<RoleEntity> roles = new ArrayList<>();
-        for (UserRoleEntity userRole : userRoleEntity) {
-            roles.add(userRole.getRoleEntity());
-        }
-        return roles;
-    }
 
-    public void setRoles(List<RoleEntity> roles) {
-        this.userRoleEntity = roles.stream()
-                .map(role -> {
-                    UserRoleEntity userRoleEntity = new UserRoleEntity();
-                    userRoleEntity.setRoleEntity(role);
-                    userRoleEntity.setUserEntity(this);
-                    return userRoleEntity;
-                })
-                .collect(Collectors.toList());
-    }
 
 }

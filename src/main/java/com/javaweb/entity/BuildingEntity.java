@@ -5,6 +5,7 @@ import com.javaweb.enums.District;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -30,13 +31,16 @@ public class BuildingEntity extends BaseEntity{
 
     //private District district;
 
-    @OneToMany(mappedBy = "buildingEntity",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "buildingEntity",fetch = FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true)
     @JsonManagedReference
     private List<RentAreaEntity> rentAreaEntity;
 
-    @OneToMany(mappedBy = "building")
-    @JsonManagedReference
-    private List<AssignmentBuildingEntity> buildingUserEntities;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "assignmentbuilding",
+            joinColumns = @JoinColumn(name = "buildingid", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "staffid", nullable = false))
+    private List<UserEntity> users = new ArrayList<>();
 
     @Column(name = "structure")
     private String structure;

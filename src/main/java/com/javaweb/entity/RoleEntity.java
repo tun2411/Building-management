@@ -21,21 +21,14 @@ public class RoleEntity extends BaseEntity {
     @Column(name="code")
     private String code;
 
-//    public static long getSerialVersionUID() {
-//        return serialVersionUID;
-//    }
-
-//    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-//    private List<UserEntity> user = new ArrayList<>();
-
-//    @OneToMany(mappedBy="roles",fetch = FetchType.LAZY)
-//    private List<UserRoleEntity> userRoleEntities = new ArrayList<>();
-
-    @OneToMany(mappedBy = "roleEntity")
-    private List<UserRoleEntity> roleUserEntity;
 
 
+//    @OneToMany(mappedBy = "roleEntity")
+//    private List<UserRoleEntity> roleUserEntity;
 
+
+    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
+    private List<UserEntity> userEntities;
 
 
 //    @ManyToMany(mappedBy = "roleEntities",fetch = FetchType.LAZY)

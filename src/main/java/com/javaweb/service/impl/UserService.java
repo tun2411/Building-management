@@ -3,12 +3,14 @@ package com.javaweb.service.impl;
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.UserConverter;
 import com.javaweb.entity.AssignmentBuildingEntity;
+import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.dto.PasswordDTO;
 import com.javaweb.model.dto.UserDTO;
 import com.javaweb.entity.RoleEntity;
 import com.javaweb.entity.UserEntity;
 import com.javaweb.exception.MyException;
 import com.javaweb.repository.AssignmentBuildingRepository;
+import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.IUserService;
@@ -20,10 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,6 +43,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
+
+    @Autowired
+    private BuildingRepository buildingRepository;
 
 
 
@@ -86,11 +88,14 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserEntity> getUsersByBuildingId(Long id) {
-        List<AssignmentBuildingEntity> assignments = assignmentBuildingRepository.findByBuildingId(id);
-        return assignments.stream()
-                .map(AssignmentBuildingEntity::getStaff)
-                .distinct()
-                .collect(Collectors.toList());
+        Optional<BuildingEntity> optionalBuilding = buildingRepository.findById(id);
+        if (optionalBuilding.isPresent()) {
+            BuildingEntity building = optionalBuilding.get();
+            return building.getUsers().stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     @Override
