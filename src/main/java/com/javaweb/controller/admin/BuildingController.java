@@ -2,11 +2,13 @@ package com.javaweb.controller.admin;
 
 
 
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.enums.District;
 import com.javaweb.enums.RentType;
 import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IUserService;
 import com.javaweb.service.BuildingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,10 @@ public class BuildingController {
     @GetMapping("/admin/building-list")
     public ModelAndView getAllBuilding(@ModelAttribute BuildingSearchRequest buildingSearchRequest){
         ModelAndView modelAndView = new ModelAndView("admin/building/list");
+        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            buildingSearchRequest.setStaffId(staffId);
+        }
         modelAndView.addObject("modelSearch",buildingSearchRequest);
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("district", District.getDistrict());
@@ -41,11 +47,6 @@ public class BuildingController {
         return modelAndView;
     }
 
-    //modelAndView.addObject("modelSearch",buildingSearchRequest); (một view có thể trả ra nhiều model)
-
-    //project 2 tra ve list building va quang ve ben view
-    //tim kiem thì kết hợp quăng ra view còn thêm sửa xoá làm ở API
-    //HIển thị ra - xử lý ở Controller(API)
 
 
     @GetMapping("/admin/building-edit")
@@ -62,6 +63,14 @@ public class BuildingController {
         ModelAndView modelAndView = new ModelAndView("admin/building/edit");
         BuildingDTO buildingDTO = buildingService.findBuildingById(id);
         modelAndView.addObject("buildingEdit",buildingDTO);
+        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            if(!buildingService.checkAssignedStaff(id, staffId)){
+                modelAndView.setViewName("/error/404");
+                return modelAndView;
+            }
+        }
+
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
         return modelAndView;

@@ -306,12 +306,16 @@
                           class="hidden-sm hidden-xs btn-group"
                           bis_skin_checked="1"
                   >
-                    <button style="width: 24px;height: 24px;border:none"
-                            class="btn btn-xs btn-success"
-                            onclick="assignmentBuilding(${building.id})" title = "Giao toà nhà"
-                    >
-                      <i class="ace-icon fa fa-users bigger-120"></i>
-                    </button>
+                    <security:authorize access="hasRole('MANAGER')">
+                      <button style="width: 24px;height: 24px;border:none"
+                              class="btn btn-xs btn-success"
+                              onclick="assignmentBuilding(${building.id})" title = "Giao toà nhà"
+                      >
+                        <i class="ace-icon fa fa-users bigger-120"></i>
+                      </button>
+                    </security:authorize>
+
+
                     <a href="/admin/building-edit-${building.id} " style="width: 24px;height: 24px;border:none"
                        class="btn btn-xs btn-info" title="Sửa thông tin">
                       <i class="ace-icon fa fa-pencil bigger-120"></i>

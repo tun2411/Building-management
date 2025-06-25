@@ -15,4 +15,5 @@ public interface BuildingService {
     List<StaffResponseDTO> findAssignedStaffs(Long id);
     BuildingEntity createBuilding(BuildingDTO buildingDTO);
     BuildingEntity updateBuilding(BuildingDTO buildingDTO);
+    boolean checkAssignedStaff(Long buildingId, Long staffId);
 }

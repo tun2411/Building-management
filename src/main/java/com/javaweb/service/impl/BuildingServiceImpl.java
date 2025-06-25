@@ -135,4 +135,10 @@ public class BuildingServiceImpl implements BuildingService {
         }
         return buildingEntity;
     }
+
+    @Override
+    public boolean checkAssignedStaff(Long buildingId, Long staffId) {
+        BuildingEntity building = buildingRepository.findById(buildingId).get();
+        return building.getBuildingUserEntities().stream().anyMatch(it -> it.getId() == staffId);
+    }
 }
