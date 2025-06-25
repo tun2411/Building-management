@@ -104,7 +104,7 @@ public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
         sql.append(buildWhere(buildingSearchRequest));
         sql.append(" GROUP BY b.id ");
         sql.append("ORDER BY b.createddate DESC ");
-		System.out.print(sql);
+        System.out.print(sql);
         Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
         List<BuildingEntity> T = query.getResultList();
         return T;
