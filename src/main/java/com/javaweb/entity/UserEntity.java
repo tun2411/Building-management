@@ -35,11 +35,6 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email", unique = true)
     private String email;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "user_role",
-//            joinColumns = @JoinColumn(name = "user_id", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
-//    private List<RoleEntity> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "userEntity")
     @JsonManagedReference
@@ -48,6 +43,10 @@ public class UserEntity extends BaseEntity {
     @OneToMany(mappedBy = "staff")
     @JsonManagedReference
     private List<AssignmentBuildingEntity> userBuildingEntities;
+
+    @OneToMany(mappedBy = "staffs")
+    @JsonManagedReference
+    private List<AssignmentCustomerEntity> userCustomerEntities;
 
     public List<RoleEntity> getRoles() {
         List<RoleEntity> roles = new ArrayList<>();

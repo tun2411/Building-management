@@ -4,6 +4,7 @@ import com.javaweb.entity.BuildingEntity;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.utils.StringUtils;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class BuildingRepositoryImpl implements BuildingRepositoryCustom {
     @PersistenceContext
     private EntityManager entityManager;

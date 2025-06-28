@@ -12,46 +12,6 @@
 </head>
 <body>
 <div class="page-wrapper">
-    <%--<header>--%>
-        <%--<!-- MENU  -->--%>
-        <%--<div class="p-4">--%>
-            <%--<div class="row navbar">--%>
-                <%--<div class="col-12 col-md-3">--%>
-                    <%--<div class="logo">--%>
-                        <%--<a href="">--%>
-                            <%--<img src="https://bizweb.dktcdn.net/100/328/362/themes/894751/assets/logo.png?1676257083798"--%>
-                                 <%--alt="">--%>
-                        <%--</a>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-                <%--<div class="col-12 col-md-6">--%>
-                    <%--<div class="item-menu">--%>
-                        <%--<div class="nav nav1">--%>
-                            <%--<div class="nav-item p-2"><a class="nav-item-link" href="/trang-chu"><span>Trang--%>
-                                            <%--chủ</span></a></div>--%>
-                            <%--<div class="nav-item p-2"><a class="nav-item-link" href="/gioi-thieu"><span>Giới--%>
-                                            <%--thiệu</span></a></div>--%>
-                            <%--<div class="nav-item p-2"><a class="nav-item-link" href="/san-pham"><span>Sản phẩm--%>
-                                        <%--</span></a></div>--%>
-                            <%--<div class="nav-item p-2"><a class="nav-item-link" href="/tin-tuc"><span>Tin--%>
-                                            <%--tức</span></a></div>--%>
-                            <%--<div class="nav-item p-2">--%>
-                                <%--<a class="nav-item-link" href="/lien-he">--%>
-                                    <%--<span style="color: var(--primary-color);">Liên hệ</span>--%>
-                                <%--</a>--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-                <%--<div class="col-12 col-md-3">--%>
-                    <%--<button class="btn btn-primary px-4">--%>
-                        <%--Liên hệ tư vấn--%>
-                    <%--</button>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</header>--%>
-    <!-- INTRO  -->
     <div class="intro text-center mb-5">
         <div class="title-page">Liên hệ</div>
         <div class="row">
@@ -116,18 +76,23 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <h2 class="title-lienhe"><strong>Liên hệ với chúng tôi</strong></h2>
-                    <form>
+                        <form id="contactForm" action="${pageContext.request.contextPath}/api/contact" method="POST">
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Họ và tên">
+                                <input type="text" name="fullName" class="form-control" placeholder="Họ và tên">
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Email">
+                                <input type="text" name="email" class="form-control" placeholder="Email">
+                                <span class="error text-danger" id="emailError"></span>
                             </div>
                         </div>
-                        <input type="text" class="form-control mt-3" placeholder="Số điện thoại">
-                        <input type="text" class="form-control mt-3" placeholder="Nội dung">
-                        <button class="btn btn-primary px-4 mt-3">
+                        <input type="text" name="phone" class="form-control mt-3" placeholder="Số điện thoại">
+                            <span class="error text-danger" id="phoneError"></span>
+                        <input type="text" name="demand" class="form-control mt-3" placeholder="Nội dung">
+                            <div class="mt-3">
+                                <span id="generalError" class="text-danger"></span>
+                            </div>
+                        <button class="btn btn-primary px-4 mt-3" type="submit">
                             Gửi liên hệ
                         </button>
                     </form>
@@ -235,5 +200,53 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        const $contactForm = $('#contactForm');
+        const $fullName = $('#fullName');
+        const $phone = $('#phone');
+        const $demand = $('#demand');
+        const $email = $('#email');
+        const $emailError = $('#emailError');
+        const $phoneError = $('#phoneError');
+        const $generalError = $('#generalError');
+
+        $contactForm.on('submit', function(event) {
+            event.preventDefault();
+
+            $phoneError.text('');
+            $emailError.text('');
+            $generalError.text('');
+
+            const formData = {
+                fullName: $fullName.val(),
+                email: $email.val(),
+                phone: $phone.val(),
+                demand: $demand.val(),
+            };
+            $.ajax({
+                url: '/api/contact',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    // $successMessage.text(response.message);
+                    alert("Gửi thông tin thành công, chuyển hướng về trang chủ");
+                    <%--window.location.href = '${pageContext.request.contextPath}/trang-chu';--%>
+                },
+                error: function(xhr) {
+                    const response = xhr.responseJSON;
+                    if (response && response.data) {
+                        if (response.data.phone) $phoneError.text(response.data.phone);
+                        if (response.data.email) $emailError.text(response.data.email);
+                    } else {
+                        $generalError.text(response.message || 'Đã có lỗi xảy ra.');
+                    }
+                }
+            });
+        });
+    });
+</script>
 </body>
+
 </html>

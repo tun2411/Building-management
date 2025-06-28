@@ -7,10 +7,12 @@ import com.javaweb.model.dto.PasswordDTO;
 import com.javaweb.model.dto.UserDTO;
 import com.javaweb.entity.RoleEntity;
 import com.javaweb.entity.UserEntity;
+import com.javaweb.entity.UserRoleEntity;
 import com.javaweb.exception.MyException;
 import com.javaweb.repository.AssignmentBuildingRepository;
 import com.javaweb.repository.RoleRepository;
 import com.javaweb.repository.UserRepository;
+import com.javaweb.repository.UserRoleRepository;
 import com.javaweb.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,31 @@ public class UserService implements IUserService {
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
+
+    public boolean existsByUserName(String userName) {
+        return userRepository.existsByUserName(userName);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public void registerUser(UserDTO userDTO) {
+
+        UserEntity user = userConverter.convertToEntity(userDTO);
+        user.setStatus(1);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userRepository.save(user);
+
+        UserRoleEntity userRoleEntity = new UserRoleEntity();
+        userRoleEntity.setUserEntity(user);
+        RoleEntity roleEntity = roleRepository.findOneByCode("USER");
+        userRoleEntity.setRoleEntity(roleEntity);
+        userRoleRepository.save(userRoleEntity);
+  }
 
     @Override
     public UserDTO findOneByUserNameAndStatus(String name, int status) {

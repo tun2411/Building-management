@@ -39,7 +39,7 @@
 												<p class="text-white-50 mb-5">Please enter your login and password!</p>
 												<form action="j_spring_security_check" id="formLogin" method="post">
 												<div class="form-outline form-white mb-4">
-													<label class="form-label" for="userName">Email</label>
+													<label class="form-label" for="userName">UserName</label>
 													<input type="text" class="form-control" id="userName" name="j_username" placeholder="Tên đăng nhập">
 												</div>
 
@@ -66,7 +66,7 @@
 												</div>
 											</div>
 											<div class="text-center">
-												<p class="mb-0 tex-center account">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a></p>
+												<p class="mb-0 tex-center account">Don't have an account? <a href="${pageContext.request.contextPath}/register" class="text-white-50 fw-bold">Sign Up</a></p>
 											</div>
 
 										</div>
