@@ -1,21 +1,16 @@
 package com.javaweb.controller.admin;
 
-import com.javaweb.constant.SystemConstant;
-import com.javaweb.enums.District;
-import com.javaweb.enums.RentType;
 import com.javaweb.enums.Status;
-import com.javaweb.model.request.BuildingSearchRequest;
+import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
-import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.CustomerSearchResponse;
-import com.javaweb.security.utils.SecurityUtils;
-import com.javaweb.service.BuildingService;
 import com.javaweb.service.CustomerService;
 import com.javaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -30,7 +25,7 @@ public class CustomerController {
     private IUserService userService;
 
     @GetMapping("/admin/customer-list")
-    public ModelAndView getAllBuilding(@ModelAttribute CustomerSearchRequest customerSearchRequest){
+    public ModelAndView getAllCustomer(@ModelAttribute CustomerSearchRequest customerSearchRequest){
         ModelAndView modelAndView = new ModelAndView("admin/customer/list");
 //        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
 //            Long staffId = SecurityUtils.getPrincipal().getId();
@@ -41,9 +36,30 @@ public class CustomerController {
         modelAndView.addObject("status", Status.getStatus());
         List<CustomerSearchResponse> responseList = customerService.searchCustomers(customerSearchRequest);
         modelAndView.addObject("customerSearchResponses",responseList);
-
         return modelAndView;
     }
 
+    @GetMapping("/admin/customer-edit")
+    public ModelAndView createCustomer(@ModelAttribute CustomerDTO customerDTO){
+        ModelAndView modelAndView = new ModelAndView("admin/customer/edit");
+        modelAndView.addObject("customerEdit",customerDTO);
+        modelAndView.addObject("status", Status.getStatus());
+        return modelAndView;
+    }
 
+    @GetMapping("/admin/customer-edit-{id}")
+    public ModelAndView updateCustomer(@PathVariable Long id){
+        ModelAndView modelAndView = new ModelAndView("admin/customer/edit");
+        CustomerDTO customerDTO = customerService.findCustomerById(id);
+        modelAndView.addObject("customerEdit",customerDTO);
+//        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
+//            Long staffId = SecurityUtils.getPrincipal().getId();
+//            if(!buildingService.checkAssignedStaff(id, staffId)){
+//                modelAndView.setViewName("/error/404");
+//                return modelAndView;
+//            }
+//        }
+        modelAndView.addObject("status", Status.getStatus());
+        return modelAndView;
+    }
 }

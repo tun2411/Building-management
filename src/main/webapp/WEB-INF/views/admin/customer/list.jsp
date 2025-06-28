@@ -131,57 +131,28 @@
             </div>
           </div>
 
-
           <div style="padding-right: 20px" class="pull-right">
             <br>
-            <a href="/admin/building-edit">
+            <a href="/admin/customer-edit">
               <button
                       class="btn btn-app btn-success btn-xs"
-                      title="Thêm toà nhà"
+                      title="Thêm khách hàng"
               >
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        fill="currentColor"
-                        class="bi bi-building-add"
-                        viewBox="0 0 16 16"
-                >
-                  <path
-                          d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0"
-                  />
-                  <path
-                          d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1z"
-                  />
-                  <path
-                          d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                  <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
                 </svg>
               </button>
             </a>
 
             <button
                     class="btn btn-app btn-danger btn-xs"
-                    title="Xoá toà nhà"
-                    id="btnDeleteBuilding"
+                    title="Xoá khách hàng"
+                    id="btnDeleteCustomer"
             >
-              <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      class="bi bi-building-dash"
-                      viewBox="0 0 16 16"
-              >
-                <path
-                        d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1"
-                />
-                <path
-                        d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1z"
-                />
-                <path
-                        d="M4.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-6 3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm3 0a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-dash" viewBox="0 0 16 16">
+                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
               </svg>
             </button>
           </div>
@@ -243,7 +214,7 @@
                     <security:authorize access="hasRole('MANAGER')">
                       <button style="width: 24px;height: 24px;border:none"
                               class="btn btn-xs btn-success"
-                              onclick="assignmentBuilding(${building.id})" title = "Giao người dùng"
+                              onclick="assignmentCustomer(${customer.id})" title = "Giao người dùng"
                       >
                         <i class="ace-icon fa fa-users bigger-120"></i>
                       </button>
@@ -257,11 +228,10 @@
 
                     <button style="width: 24px;height: 24px;border:none"
                             class="btn btn-xs btn-danger"
-                            onclick="deleteBuilding(${customer.id})" title="Xoá người dùng"
+                            onclick="deleteCustomer(${customer.id})" title="Xoá người dùng"
                     >
                       <i class="ace-icon fa fa-trash-o bigger-120"></i>
                     </button>
-
 
                   </div>
                 </td>
@@ -276,7 +246,7 @@
     </div>
   </div>
   <div class="modal fade"
-       id="assignmentBuildingModal"
+       id="assignmentCustomerModal"
        tabindex="-1"
        role="dialog"
        aria-labelledby="exampleModalLabel"
@@ -315,7 +285,7 @@
             <tbody>
             </tbody>
           </table>
-          <input type="hidden" id="buildingId" value="" />
+          <input type="hidden" id="customerId" value="" />
         </div>
         <div class="modal-footer">
           <button
@@ -328,9 +298,9 @@
           <button
                   type="button"
                   class="btn btn-primary"
-                  id="btnAssignBuilding"
+                  id="btnAssignCustomer"
           >
-            Giao toà nhà
+            Giao khách hàng
           </button>
         </div>
       </div>
@@ -339,18 +309,18 @@
 </div>
 
 <script>
-  function assignmentBuilding(buildingId) {
-    console.log("id toà nhà : " + buildingId);
-    $("#assignmentBuildingModal").modal();
-    $("#buildingId").val(buildingId);
-    loadStaff(buildingId);
+  function assignmentCustomer(customerId) {
+    console.log("id khách hàng : " + customerId);
+    $("#assignmentCustomerModal").modal();
+    $("#customerId").val(customerId);
+    loadStaff(customerId);
   }
 
-  function loadStaff(buildingId){
+  function loadStaff(customerId){
     //Gui request xuong sever => ajax
     $.ajax({
       type: "GET",
-      url: "/api/buildings/" + buildingId + '/staffs',
+      url: "/api/customers/" + customerId + '/staffs',
       dataType: "json",
       success: function (response) {
         var row = '';
@@ -364,15 +334,14 @@
       },
       error: function (response) {
         console.log("Failed");
-        //console.log(url);
       },
     });
   }
 
-  $("#btnAssignBuilding").click(function (e) {
+  $("#btnAssignCustomer").click(function (e) {
     e.preventDefault();
     var json = {};
-    json["buildingId"] = $("#buildingId").val();
+    json["customerId"] = $("#customerId").val();
     var staffIds = $("#staffList")
             .find("tbody input[type = checkbox]:checked")
             .map(function () {
@@ -381,41 +350,41 @@
             .get();
     json["staffs"] = staffIds;
     console.log("Success");
-    if (json["buildingId"] == "") {
+    if (json["customerId"] == "") {
       alert("Id Not Found");
     } else {
-      assignBuilding(json);
+      assignCustomer(json);
     }
   });
 
-  $("#btnDeleteBuilding").click(function (e) {
+  $("#btnDeleteCustomer").click(function (e) {
     e.preventDefault();
-    var buildingIds = $("#buildingList")
+    var customerIds = $("#customerList")
             .find("tbody input[type = checkbox]:checked")
             .map(function () {
               return $(this).val();
             })
             .get();
     console.log("Success...");
-    if (buildingIds === "") {
-      alert("No Buildings Is Selected");
+    if (customerIds === "") {
+      alert("No Customers Is Selected");
     } else {
-      deleteBuildings(buildingIds);
+      deleteCustomers(customerIds);
     }
   });
 
-  function deleteBuildings(ids) {
+  function deleteCustomers(ids) {
     //Gui request xuong sever => ajax
     $.ajax({
       type: "DELETE",
-      url: "/api/buildings/" + ids,
+      url: "/api/customers/" + ids,
       //data: JSON.stringify(json),
       dataType: "json",
       //contentType: "application/json",
       success: function (response) {
         console.log("Success");
         alert(response.message);
-        window.location.href = "/admin/building-list";
+        window.location.href = "/admin/customer-list";
       },
       error: function (response) {
         console.log("Failed");
@@ -425,19 +394,19 @@
     });
   }
 
-  function deleteBuilding(id) {
+  function deleteCustomer(id) {
     if (id === "") {
       alert("Id not found");
     } else {
-      deleteBuildings(id);
+      deleteCustomers(id);
     }
   }
 
-  function assignBuilding(json) {
+  function assignCustomer(json) {
     //Gui request xuong sever => ajax
     $.ajax({
       type: "POST",
-      url: "/api/assign",
+      url: "/api/assignCustomer",
       data: JSON.stringify(json),
       dataType: "json",
       contentType: "application/json",

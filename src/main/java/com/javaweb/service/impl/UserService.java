@@ -2,17 +2,11 @@ package com.javaweb.service.impl;
 
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.converter.UserConverter;
-import com.javaweb.entity.AssignmentBuildingEntity;
+import com.javaweb.entity.*;
 import com.javaweb.model.dto.PasswordDTO;
 import com.javaweb.model.dto.UserDTO;
-import com.javaweb.entity.RoleEntity;
-import com.javaweb.entity.UserEntity;
-import com.javaweb.entity.UserRoleEntity;
 import com.javaweb.exception.MyException;
-import com.javaweb.repository.AssignmentBuildingRepository;
-import com.javaweb.repository.RoleRepository;
-import com.javaweb.repository.UserRepository;
-import com.javaweb.repository.UserRoleRepository;
+import com.javaweb.repository.*;
 import com.javaweb.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +40,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
+
+    @Autowired
+    private AssignmentCustomerRepository assignmentCustomerRepository;
 
     @Autowired
     private UserRoleRepository userRoleRepository;
@@ -115,6 +112,15 @@ public class UserService implements IUserService {
         List<AssignmentBuildingEntity> assignments = assignmentBuildingRepository.findByBuildingId(id);
         return assignments.stream()
                 .map(AssignmentBuildingEntity::getStaff)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserEntity> getUsersByCustomerId(Long customerId) {
+        List<AssignmentCustomerEntity> assignments = assignmentCustomerRepository.findByCustomersId(customerId);
+        return assignments.stream()
+                .map(AssignmentCustomerEntity::getStaffs)
                 .distinct()
                 .collect(Collectors.toList());
     }

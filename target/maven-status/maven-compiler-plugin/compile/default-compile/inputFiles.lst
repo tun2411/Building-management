@@ -22,11 +22,13 @@ D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\servi
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\entity\TransactionEntity.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\RoleDTO.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\repository\custom\UserRepositoryCustom.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\AssignmentCustomerService.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\IRoleService.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\api\web\NewAPI.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\entity\UserEntity.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\converter\UserConverter.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\api\admin\RegisterAPI.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\exception\ValidateDataCustomerException.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\repository\RoleRepository.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\controlleradvice\ControllerAdvisor.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\exception\MyException.java
@@ -45,6 +47,7 @@ D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\confi
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\AssignmentBuildingDTO.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\CustomerService.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\AbstractDTO.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\impl\AssignmentCustomerServiceImpl.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\entity\UserRoleEntity.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\entity\BaseEntity.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\response\BuildingSearchResponse.java
@@ -60,6 +63,8 @@ D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\confi
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\impl\BuildingServiceImpl.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\service\AssignmentBuildingService.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\request\CustomerSearchRequest.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\api\admin\AssignmentCustomerAPI.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\repository\AssignmentCustomerRepository.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\utils\MapUtils.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\api\admin\UserAPI.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\CustomerDTO.java
@@ -84,5 +89,6 @@ D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\secur
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\constant\SystemConstant.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\utils\ReadFileUtils.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\utils\UploadFileUtils.java
+D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\AssignmentCustomerDTO.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\response\ResponseDTO.java
 D:\Project-JavaBackend\Project-3\Spring-boot-web\src\main\java\com\javaweb\model\dto\BuildingDTO.java

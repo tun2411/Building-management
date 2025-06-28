@@ -1,11 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="/common/taglib.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên hệ</title>
@@ -76,23 +74,24 @@
                 </div>
                 <div class="col-12 col-md-6">
                     <h2 class="title-lienhe"><strong>Liên hệ với chúng tôi</strong></h2>
-                        <form id="contactForm" action="${pageContext.request.contextPath}/api/contact" method="POST">
+                        <form id="contactForm" role="form" action="${pageContext.request.contextPath}/lien-he" method="POST">
                         <div class="row">
                             <div class="col">
-                                <input type="text" name="fullName" class="form-control" placeholder="Họ và tên">
+                                <input type="text" name="fullName" class="form-control" placeholder="Họ và tên" />
+                                <span class="error text-danger" id="fullNameError"></span>
                             </div>
                             <div class="col">
-                                <input type="text" name="email" class="form-control" placeholder="Email">
+                                <input type="email" name="email" class="form-control" placeholder="Email"/>
                                 <span class="error text-danger" id="emailError"></span>
                             </div>
                         </div>
-                        <input type="text" name="phone" class="form-control mt-3" placeholder="Số điện thoại">
+                        <input type="text" name="phone" class="form-control mt-3" placeholder="Số điện thoại" />
                             <span class="error text-danger" id="phoneError"></span>
-                        <input type="text" name="demand" class="form-control mt-3" placeholder="Nội dung">
+                        <input name="demand" class="form-control mt-3" placeholder="Nội dung" rows="3" />
                             <div class="mt-3">
                                 <span id="generalError" class="text-danger"></span>
                             </div>
-                        <button class="btn btn-primary px-4 mt-3" type="submit">
+                        <button class="btn btn-primary px-4 mt-3" id="sendContact" type="submit">
                             Gửi liên hệ
                         </button>
                     </form>
@@ -198,55 +197,56 @@
         </div>
     </footer>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        const $contactForm = $('#contactForm');
-        const $fullName = $('#fullName');
-        const $phone = $('#phone');
-        const $demand = $('#demand');
-        const $email = $('#email');
+
+    $("#contactForm").on('submit', function(event) {
+        event.preventDefault();
+        
+        const $fullNameError = $('#fullNameError');
         const $emailError = $('#emailError');
         const $phoneError = $('#phoneError');
         const $generalError = $('#generalError');
 
-        $contactForm.on('submit', function(event) {
-            event.preventDefault();
+        $fullNameError.text('');
+        $phoneError.text('');
+        $emailError.text('');
+        $generalError.text('');
 
-            $phoneError.text('');
-            $emailError.text('');
-            $generalError.text('');
+        var formData = $("#contactForm").serializeArray();
+        var json = {};
+        $.each(formData, function (i, it) {
+            json["" + it.name + ""] = it.value;
+        });
+        $.ajax({
+            url: '${pageContext.request.contextPath}/lien-he',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(json),
+            success: function(response) {
+                console.log('Success response:', response);
+                alert("Gửi thông tin thành công, chuyển hướng về trang chủ");
+                window.location.href = '${pageContext.request.contextPath}/trang-chu';
+            },
+            error: function(xhr, status, error) {
+                console.log('Error status:', status);
+                console.log('Error:', error);
+                console.log('Response text:', xhr.responseText);
+                console.log('Response JSON:', xhr.responseJSON);
 
-            const formData = {
-                fullName: $fullName.val(),
-                email: $email.val(),
-                phone: $phone.val(),
-                demand: $demand.val(),
-            };
-            $.ajax({
-                url: '/api/contact',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function(response) {
-                    // $successMessage.text(response.message);
-                    alert("Gửi thông tin thành công, chuyển hướng về trang chủ");
-                    <%--window.location.href = '${pageContext.request.contextPath}/trang-chu';--%>
-                },
-                error: function(xhr) {
-                    const response = xhr.responseJSON;
-                    if (response && response.data) {
-                        if (response.data.phone) $phoneError.text(response.data.phone);
-                        if (response.data.email) $emailError.text(response.data.email);
-                    } else {
-                        $generalError.text(response.message || 'Đã có lỗi xảy ra.');
-                    }
+                const response = xhr.responseJSON;
+                if (response && response.data) {
+                    if (response.data.fullName) $fullNameError.text(response.data.fullName);
+                    if (response.data.phone) $phoneError.text(response.data.phone);
+                    if (response.data.email) $emailError.text(response.data.email);
+                } else {
+                    $generalError.text(response.message || 'Đã có lỗi xảy ra.');
                 }
-            });
+            }
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </body>
-
 </html>

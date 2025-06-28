@@ -27,21 +27,6 @@ public class BuildingAPI {
     @PostMapping
     public ResponseEntity<?> createBuilding(@Valid @RequestBody BuildingDTO buildingDTO){
         ResponseDTO responseDTO = new ResponseDTO();
-        //        try{
-//            if (bindingResult.hasErrors()){
-//                List<String> errors = bindingResult.getFieldErrors()
-//                        .stream()
-//                        .map(FieldError::getDefaultMessage)
-//                        .collect(Collectors.toList());
-//                responseDTO.setMessage("Validate Failed");
-//                responseDTO.setData(errors);
-//                return ResponseEntity.badRequest().body(responseDTO);
-//            }
-//        }catch (Exception e){
-//            responseDTO.setMessage("Internal server Error");
-//            responseDTO.setDetail(e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
-//        }abc
         BuildingEntity buildingEntity = buildingService.createBuilding(buildingDTO);
         System.out.println("OK");
         responseDTO.setMessage("Create Building Completed");

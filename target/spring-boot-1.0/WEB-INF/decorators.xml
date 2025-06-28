@@ -24,4 +24,5 @@
     <decorator name="register" page="register.jsp">
         <pattern>/register</pattern>
     </decorator>
+
 </decorators>

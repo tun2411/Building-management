@@ -70,7 +70,6 @@ public class BuildingController {
                 return modelAndView;
             }
         }
-
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
         return modelAndView;

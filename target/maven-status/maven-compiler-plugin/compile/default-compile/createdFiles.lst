@@ -40,6 +40,8 @@ com\javaweb\model\request\CustomerSearchRequest.class
 com\javaweb\api\admin\ContactAPI.class
 com\javaweb\enums\Status.class
 com\javaweb\model\dto\BuildingDTO.class
+com\javaweb\exception\ValidateDataCustomerException.class
+com\javaweb\repository\AssignmentCustomerRepository.class
 com\javaweb\utils\DistrictCode.class
 com\javaweb\model\dto\PasswordDTO.class
 com\javaweb\service\impl\AssignmentBuildingServiceImpl.class
@@ -58,6 +60,7 @@ com\javaweb\utils\MessageUtils.class
 com\javaweb\api\admin\CustomerAPI.class
 com\javaweb\utils\MapUtils.class
 com\javaweb\enums\District.class
+com\javaweb\model\dto\AssignmentCustomerDTO.class
 com\javaweb\repository\UserRoleRepository.class
 com\javaweb\service\impl\UserService.class
 com\javaweb\model\dto\MyUserDetail.class
@@ -74,14 +77,17 @@ com\javaweb\converter\UserConverter.class
 com\javaweb\constant\SystemConstant.class
 com\javaweb\model\response\BuildingSearchResponse.class
 com\javaweb\controller\admin\HomeController.class
+com\javaweb\service\impl\AssignmentCustomerServiceImpl.class
 com\javaweb\model\response\ResponseDTO.class
 com\javaweb\config\WebSecurityConfig.class
 com\javaweb\service\CustomerService.class
+com\javaweb\service\AssignmentCustomerService.class
 com\javaweb\controller\admin\BuildingController.class
 com\javaweb\enums\RentType.class
 com\javaweb\repository\custom\impl\BuildingRepositoryImpl.class
 com\javaweb\model\dto\AbstractDTO.class
 com\javaweb\service\AssignmentBuildingService.class
+com\javaweb\api\admin\AssignmentCustomerAPI.class
 com\javaweb\controller\admin\CustomerController.class
 com\javaweb\repository\custom\CustomerRepositoryCustom.class
 com\javaweb\api\admin\UserAPI.class
