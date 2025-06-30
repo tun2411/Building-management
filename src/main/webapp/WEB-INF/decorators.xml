@@ -25,4 +25,8 @@
         <pattern>/register</pattern>
     </decorator>
 
+    <decorator name="404" page="404.jsp">
+        <pattern>/404</pattern>
+    </decorator>
+
 </decorators>

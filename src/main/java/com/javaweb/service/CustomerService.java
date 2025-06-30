@@ -14,8 +14,8 @@ import java.util.List;
 
 public interface CustomerService {
     List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest);
-    boolean existsByPhone(String phone);
-    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone, Long id);
+    boolean existsByEmail(String email, Long id);
     void contactUser(CustomerDTO customerDTO);
     CustomerDTO findCustomerById(Long id);
     CustomerEntity createCustomer(CustomerDTO customerDTO);
@@ -23,4 +23,5 @@ public interface CustomerService {
     String delete(List<Long> ids);
     List<StaffResponseDTO> findAssignedStaffs(Long id);
     CustomerEntity findById(Long id);
+    boolean checkAssignedStaff(Long customerId, Long staffId);
 }

@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -138,7 +139,17 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public boolean checkAssignedStaff(Long buildingId, Long staffId) {
+        if (buildingId == null || staffId == null) {
+            throw new IllegalArgumentException("buildingId and staffId must not be null");
+        }
         BuildingEntity building = buildingRepository.findById(buildingId).get();
-        return building.getBuildingUserEntities().stream().anyMatch(it -> it.getId() == staffId);
+        if (building.getBuildingUserEntities() == null || building.getBuildingUserEntities().isEmpty()) {
+            return false;
+        }
+        return building.getBuildingUserEntities().stream()
+                .anyMatch(assignment -> {
+                    UserEntity staff = assignment.getStaff();
+                    return staff != null && Objects.equals(staff.getId(), staffId);
+                });
     }
 }

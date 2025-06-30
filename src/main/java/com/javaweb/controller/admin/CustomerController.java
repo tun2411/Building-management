@@ -1,11 +1,13 @@
 package com.javaweb.controller.admin;
 
+import com.javaweb.constant.SystemConstant;
 import com.javaweb.entity.TransactionEntity;
 import com.javaweb.enums.Status;
 import com.javaweb.enums.Transaction;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.CustomerSearchResponse;
+import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.CustomerService;
 import com.javaweb.service.ITransactionService;
 import com.javaweb.service.IUserService;
@@ -33,10 +35,10 @@ public class CustomerController {
     @GetMapping("/admin/customer-list")
     public ModelAndView getAllCustomer(@ModelAttribute CustomerSearchRequest customerSearchRequest){
         ModelAndView modelAndView = new ModelAndView("admin/customer/list");
-//        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
-//            Long staffId = SecurityUtils.getPrincipal().getId();
-//            customerSearchRequest.setStaffId(staffId);
-//        }
+        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            customerSearchRequest.setStaffId(staffId);
+        }
         modelAndView.addObject("modelSearch",customerSearchRequest);
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("status", Status.getStatus());
@@ -61,13 +63,12 @@ public class CustomerController {
         CustomerDTO customerDTO = customerService.findCustomerById(id);
         modelAndView.addObject("customerEdit",customerDTO);
         modelAndView.addObject("transactionType", Transaction.getTransactionType());
-//        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
-//            Long staffId = SecurityUtils.getPrincipal().getId();
-//            if(!buildingService.checkAssignedStaff(id, staffId)){
-//                modelAndView.setViewName("/error/404");
-//                return modelAndView;
-//            }
-//        }
+        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
+            Long staffId = SecurityUtils.getPrincipal().getId();
+            if(!customerService.checkAssignedStaff(id, staffId)){
+                return new ModelAndView("redirect:/login?accessDenied");
+            }
+        }
         modelAndView.addObject("status", Status.getStatus());
         List<TransactionEntity> CSKH = transactionService.getTransactionByCodeAndCustomerId("CSKH",id);
         List<TransactionEntity> DDX = transactionService.getTransactionByCodeAndCustomerId("DDX",id);

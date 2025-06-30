@@ -31,13 +31,13 @@ public class ContactAPI {
                 errors.put("phone", "Số điện thoại không được để trống");
             } else if (!customerDTO.getPhone().matches("^(03|05|07|08|09)\\d{8}$")) {
                 errors.put("phone", "Số điện thoại không hợp lệ");
-            } else if (customerService.existsByPhone(customerDTO.getPhone())) {
+            } else if (customerService.existsByPhone(customerDTO.getPhone(),null)) {
                 errors.put("phone", "Số điện thoại đã tồn tại trong hệ thống");
             }
             if (customerDTO.getEmail() != null && !customerDTO.getEmail().trim().isEmpty()) {
                 if (!customerDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.(com|vn|net|org)$")) {
                     errors.put("email", "Email không đúng định dạng");
-                } else if (customerService.existsByEmail(customerDTO.getEmail())) {
+                } else if (customerService.existsByEmail(customerDTO.getEmail(),null)) {
                     errors.put("email", "Email đã tồn tại");
                 }
             }

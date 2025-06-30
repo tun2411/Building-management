@@ -467,16 +467,11 @@
     if (buildingIds === "") {
       alert("No Buildings Is Selected");
     } else {
-      if (confirm("Bạn có chắc muốn xóa giao dịch này?")) {
+      if (confirm("Bạn có chắc chắn muốn xóa các tòa nhà đã chọn?")) {
         deleteBuildings(buildingIds);
       }
     }
   });
-  // function deleteTransaction(id, customerId) {
-  //   if (confirm("Bạn có chắc muốn xóa giao dịch này?")) {
-  //     deleteTransactionRequest(id, customerId);
-  //   }
-  // }
 
   function deleteBuildings(ids) {
     //Gui request xuong sever => ajax
@@ -503,7 +498,9 @@
     if (id === "") {
       alert("Id not found");
     } else {
-      deleteBuildings(id);
+      if (confirm("Bạn có chắc chắn muốn xóa tòa nhà này?")) {
+        deleteBuildings(id);
+      }
     }
   }
 

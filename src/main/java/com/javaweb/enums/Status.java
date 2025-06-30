@@ -22,10 +22,17 @@ public enum Status {
     public static Map<String,String> getStatus(){
         Map<String,String> statuses = new TreeMap<>();
         for(Status status:Status.values()){
-            statuses.put(status.toString(),status.statusName);
+            statuses.put(status.statusName,status.statusName);
         }
         return statuses;
     }
 
+    // Phương thức mới: Trả về statusName dựa trên Status
+    public static String getNameByStatus(Status status) {
+        if (status == null) {
+            return null;
+        }
+        return status.getName();
+    }
 
 }

@@ -144,7 +144,7 @@
                 </svg>
               </button>
             </a>
-
+            <security:authorize access="hasRole('MANAGER')">
             <button
                     class="btn btn-app btn-danger btn-xs"
                     title="Xoá khách hàng"
@@ -155,6 +155,7 @@
                 <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
               </svg>
             </button>
+            </security:authorize>
           </div>
         </div>
         <!-- /.span -->
@@ -226,12 +227,14 @@
                       <i class="ace-icon fa fa-pencil bigger-120"></i>
                     </a>
 
-                    <button style="width: 24px;height: 24px;border:none"
-                            class="btn btn-xs btn-danger"
-                            onclick="deleteCustomer(${customer.id})" title="Xoá người dùng"
-                    >
-                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                    </button>
+                      <security:authorize access="hasRole('MANAGER')">
+                          <button style="width: 24px;height: 24px;border:none"
+                                  class="btn btn-xs btn-danger"
+                                  onclick="deleteCustomer(${customer.id})" title="Xoá người dùng"
+                          >
+                              <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                          </button>
+                      </security:authorize>
 
                   </div>
                 </td>
@@ -317,7 +320,6 @@
   }
 
   function loadStaff(customerId){
-    //Gui request xuong sever => ajax
     $.ajax({
       type: "GET",
       url: "/api/customers/" + customerId + '/staffs',
@@ -350,7 +352,7 @@
             .get();
     json["staffs"] = staffIds;
     console.log("Success");
-    if (json["customerId"] == "") {
+    if (json["customerId"] === "") {
       alert("Id Not Found");
     } else {
       assignCustomer(json);
@@ -374,13 +376,10 @@
   });
 
   function deleteCustomers(ids) {
-    //Gui request xuong sever => ajax
     $.ajax({
       type: "DELETE",
       url: "/api/customers/" + ids,
-      //data: JSON.stringify(json),
       dataType: "json",
-      //contentType: "application/json",
       success: function (response) {
         console.log("Success");
         alert(response.message);
@@ -388,7 +387,6 @@
       },
       error: function (response) {
         console.log("Failed");
-        //console.log(url);
         alert(response.message);
       },
     });
@@ -403,7 +401,6 @@
   }
 
   function assignCustomer(json) {
-    //Gui request xuong sever => ajax
     $.ajax({
       type: "POST",
       url: "/api/assignCustomer",

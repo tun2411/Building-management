@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,13 +43,13 @@ public class CustomerServiceImpl implements CustomerService {
     private AssignmentCustomerRepository assignmentCustomerRepository;
 
     @Override
-    public boolean existsByPhone(String phone) {
-        return customerRepository.existsByPhone(phone);
+    public boolean existsByPhone(String phone, Long id) {
+        return customerRepository.existsByPhoneAndIsActiveAndIdNot(phone, id != null ? id : -1L);
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return customerRepository.existsByEmail(email);
+    public boolean existsByEmail(String email, Long id) {
+        return customerRepository.existsByEmailAndIsActiveAndIdNot(email, id != null ? id : -1L);
     }
 
     @Override
@@ -70,12 +67,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO findCustomerById(Long id) {
         CustomerEntity customerEntity = customerRepository.findById(id).get();
-        CustomerDTO customerDTO = customerConverter.toCustomerDTO(customerEntity);
-        return customerDTO;
+        return customerConverter.toCustomerDTO(customerEntity);
     }
 
     @Override
     public CustomerEntity createCustomer(CustomerDTO customerDTO) {
+        if (existsByPhone(customerDTO.getPhone(),null)) {
+            throw new IllegalArgumentException("Số điện thoại đã tồn tại trong hệ thống.");
+        }
+        if (existsByEmail(customerDTO.getEmail(),null)) {
+            throw new IllegalArgumentException("Email đã tồn tại trong hệ thống.");
+        }
         customerDTO.setIs_Active(1L);
         CustomerEntity customerEntity = customerConverter.customerEntity(customerDTO);
         customerRepository.save(customerEntity);
@@ -92,6 +94,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerEntity updateCustomer(CustomerDTO customerDTO){
+        if (existsByPhone(customerDTO.getPhone(),customerDTO.getId())) {
+            throw new IllegalArgumentException("Số điện thoại đã tồn tại trong hệ thống.");
+        }
+        if (existsByEmail(customerDTO.getEmail(),customerDTO.getId())) {
+            throw new IllegalArgumentException("Email đã tồn tại trong hệ thống.");
+        }
         customerDTO.setIs_Active(1L);
         CustomerEntity customer = customerRepository.findById(customerDTO.getId()).get();
         Date createdDate = customer.getCreatedDate();
@@ -141,5 +149,21 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerEntity findById(Long id) {
         return customerRepository.findById(id).get();
+    }
+
+    @Override
+    public boolean checkAssignedStaff(Long customerId, Long staffId) {
+            if (customerId == null || staffId == null) {
+                throw new IllegalArgumentException("customerId and staffId must not be null");
+            }
+            CustomerEntity customer = customerRepository.findById(customerId).get();
+            if (customer.getCustomerUserEntities() == null || customer.getCustomerUserEntities().isEmpty()) {
+                return false;
+            }
+            return customer.getCustomerUserEntities().stream()
+                    .anyMatch(assignment -> {
+                        UserEntity staff = assignment.getStaffs();
+                        return staff != null && Objects.equals(staff.getId(), staffId);
+                    });
     }
 }

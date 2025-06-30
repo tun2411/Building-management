@@ -78,12 +78,8 @@
                         <label class="col-xs-3 control-label">Trạng thái xử lý</label>
                         <div class="col-xs-2">
                             <form:select path="status" class="form-control">
-                                <form:options items="${status}"/>
+                                <form:options items="${status}" />
                             </form:select>
-<%--                    <form:select path="status" class="form-control">--%>
-<%--                        <form:option value="" label="--- Chọn trạng thái ---"/>--%>
-<%--                        <form:options items="${status}" itemValue="value" itemLabel="value"/>--%>
-<%--                    </form:select>--%>
                         </div>
                         <span class="error-message" style="color: red" id="status"></span>
                     </div>
@@ -159,15 +155,11 @@
                             <a class="btn btn-xs btn-info" title="Sửa thông tin" onclick="updateTransaction('CSKH',${customerEdit.id},${transaction.id},'${transaction.note}')">
                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                             </a>
-<%--                            <button style="width: 24px;height: 24px;border:none"--%>
-<%--                                    class="btn btn-xs btn-danger"--%>
-<%--                                    onclick="deleteTransaction(${transaction.id},${customerEdit.id})" title="Xoá giao dịch"--%>
-<%--                            >--%>
-<%--                                <i class="ace-icon fa fa-trash-o bigger-120"></i>--%>
-<%--                            </button>--%>
+                            <security:authorize access="hasRole('MANAGER')">
                             <a class="btn btn-xs btn-danger" title="Xoá giao dịch" onclick="deleteTransaction(${transaction.id},${customerEdit.id})">
                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                             </a>
+                            </security:authorize>
                         </td>
                     </tr>
                 </c:forEach>
@@ -202,15 +194,11 @@
                                                      <a class="btn btn-xs btn-info" title="Sửa thông tin" onclick="updateTransaction('DDX',${customerEdit.id},${transaction.id},'${transaction.note}')">
                                                          <i class="ace-icon fa fa-pencil bigger-120"></i>
                                                      </a>
-<%--                                                     <button style="width: 24px;height: 24px;border:none"--%>
-<%--                                                             class="btn btn-xs btn-danger"--%>
-<%--                                                             onclick="deleteTransaction(${transaction.id},${customerEdit.id})" title="Xoá giao dịch"--%>
-<%--                                                     >--%>
-<%--                                                         <i class="ace-icon fa fa-trash-o bigger-120"></i>--%>
-<%--                                                     </button>--%>
+                                                     <security:authorize access="hasRole('MANAGER')">
                                                      <a class="btn btn-xs btn-danger" title="Xoá giao dịch" onclick="deleteTransaction(${transaction.id},${customerEdit.id})">
                                                          <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                      </a>
+                                                     </security:authorize>
                                                  </td>
                                              </tr>
                                          </c:forEach>
@@ -225,8 +213,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="addOrUpdateTransactionModal">
 <div class="modal-dialog">
@@ -247,8 +233,6 @@
             <input type="hidden" id="customerId" value="">
             <input type="hidden" id="code" value="">
             <input type="hidden" id="transactionId" value="">
-<%--            <input type="hidden" id="createdBy" value="">--%>
-<%--            <input type="hidden" id="createdDate" value="">--%>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="btnAddOrUpdateTransaction">Xác nhận</button>
@@ -405,7 +389,6 @@
     });
 
     function addCustomer(json) {
-        //Gui request xuong sever
         $.ajax({
             type: "POST",
             url: "/api/customers",
@@ -418,12 +401,15 @@
                 window.location.href = "/admin/customer-list";
             },
             error: function (response) {
-                alert(response.data.join('\n'));
+                console.log("Error response:", response);
+                let errorMessage = response.responseJSON?.message || "Thêm khách hàng thất bại";
+                let errorDetail = response.responseJSON?.detail || "";
+                alert(errorMessage + (errorDetail ? "\nChi tiết: " + errorDetail : ""));
             },
         });
     }
+
     function updateCustomer(json) {
-        //Gui request xuong sever
         $.ajax({
             type: "PUT",
             url: "/api/customers",
@@ -436,8 +422,10 @@
                 window.location.href = "/admin/customer-list";
             },
             error: function (response) {
-                console.log("Failed");
-                //alert(response.error);
+                console.log("Error response:", response);
+                let errorMessage = response.responseJSON?.message || "Cập nhật khách hàng thất bại";
+                let errorDetail = response.responseJSON?.detail || "";
+                alert(errorMessage + (errorDetail ? "\nChi tiết: " + errorDetail : ""));
             },
         });
     }

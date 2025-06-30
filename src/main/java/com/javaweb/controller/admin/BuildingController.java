@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller(value="buildingControllerOfAdmin")
@@ -66,8 +65,7 @@ public class BuildingController {
         if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
             Long staffId = SecurityUtils.getPrincipal().getId();
             if(!buildingService.checkAssignedStaff(id, staffId)){
-                modelAndView.setViewName("/error/404");
-                return modelAndView;
+                return new ModelAndView("redirect:/login?accessDenied");
             }
         }
         modelAndView.addObject("district", District.getDistrict());

@@ -4,6 +4,7 @@ import com.javaweb.security.CustomSuccessHandler;
 import com.javaweb.service.impl.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -44,11 +45,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
                 http.csrf().disable()
                 .authorizeRequests()
-                        .antMatchers("/api/assign").hasRole("MANAGER")
-                        .antMatchers("/admin/user-list").hasRole("MANAGER")
-                        .antMatchers("/api/buildings/{id}/staffs").hasRole("MANAGER")
+                        .antMatchers(HttpMethod.DELETE, "/api/customers/**").hasRole("MANAGER")
+                        .antMatchers(HttpMethod.POST, "/api/transactions").hasAnyRole("MANAGER", "STAFF")
+                        .antMatchers(HttpMethod.DELETE, "/api/transactions/**").hasRole("MANAGER")
+                        .antMatchers("/api/assign", "/api/assignCustomer").hasRole("MANAGER")
+                        .antMatchers("/api/buildings/**/staffs", "/api/customers/**/staffs").hasRole("MANAGER")
+                        .antMatchers("/api/customers/**").hasAnyRole("MANAGER", "STAFF")
+                        .antMatchers("/admin/customer-list", "/admin/customer-edit/**").hasAnyRole("MANAGER", "STAFF")
+                        .antMatchers("/admin/building-list", "/admin/building-edit/**").hasAnyRole("MANAGER", "STAFF")
+                        .antMatchers("/admin/user-list", "/admin/user-edit/**", "/api/user").hasRole("MANAGER")
                         .antMatchers("/admin/**").hasAnyRole("MANAGER","STAFF","ADMIN")
-                        .antMatchers("/login","/register","/resource/**", "/trang-chu", "/api/**").permitAll()
+                        .antMatchers("/login", "/register", "/resource/**", "/trang-chu", "/api/**").permitAll()
+                        .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").usernameParameter("j_username").passwordParameter("j_password").permitAll()
                 .loginProcessingUrl("/j_spring_security_check")

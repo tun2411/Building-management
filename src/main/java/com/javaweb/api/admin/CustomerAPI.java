@@ -29,10 +29,20 @@ public class CustomerAPI {
     @PostMapping
     public ResponseEntity<?> createCustomer(@Valid @RequestBody CustomerDTO customerDTO){
         ResponseDTO responseDTO = new ResponseDTO();
-        CustomerEntity customerEntity = customerService.createCustomer(customerDTO);
-        System.out.println("OK");
-        responseDTO.setMessage("Create Customer Completed");
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        try {
+            CustomerEntity customerEntity = customerService.createCustomer(customerDTO);
+            System.out.println("OK");
+            responseDTO.setMessage("Create Customer Completed");
+            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        } catch (IllegalArgumentException e) {
+            responseDTO.setMessage("Failed to create customer");
+            responseDTO.setDetail(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setMessage("An error occurred");
+            responseDTO.setDetail(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
+        }
     }
 
     @PutMapping
@@ -41,10 +51,20 @@ public class CustomerAPI {
             throw new ValidateDataCustomerException("Customer Id not be null");
         }
         ResponseDTO responseDTO = new ResponseDTO();
-        CustomerEntity customerEntity = customerService.updateCustomer(customerDTO);
-        System.out.println("OK");
-        responseDTO.setMessage("Update Completed");
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        try {
+            CustomerEntity customerEntity = customerService.updateCustomer(customerDTO);
+            System.out.println("OK");
+            responseDTO.setMessage("Update Completed");
+            return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        } catch (IllegalArgumentException e) {
+            responseDTO.setMessage("Failed to update customer");
+            responseDTO.setDetail(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setMessage("An error occurred");
+            responseDTO.setDetail(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDTO);
+        }
     }
 
     @DeleteMapping("/{ids}")
