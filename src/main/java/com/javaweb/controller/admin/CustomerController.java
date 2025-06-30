@@ -1,10 +1,13 @@
 package com.javaweb.controller.admin;
 
+import com.javaweb.entity.TransactionEntity;
 import com.javaweb.enums.Status;
+import com.javaweb.enums.Transaction;
 import com.javaweb.model.dto.CustomerDTO;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.CustomerSearchResponse;
 import com.javaweb.service.CustomerService;
+import com.javaweb.service.ITransactionService;
 import com.javaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,9 @@ public class CustomerController {
     private CustomerService customerService;
 
     @Autowired
+    private ITransactionService transactionService;
+
+    @Autowired
     private IUserService userService;
 
     @GetMapping("/admin/customer-list")
@@ -34,6 +40,7 @@ public class CustomerController {
         modelAndView.addObject("modelSearch",customerSearchRequest);
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("status", Status.getStatus());
+        customerSearchRequest.setIs_Active(1L);
         List<CustomerSearchResponse> responseList = customerService.searchCustomers(customerSearchRequest);
         modelAndView.addObject("customerSearchResponses",responseList);
         return modelAndView;
@@ -43,6 +50,7 @@ public class CustomerController {
     public ModelAndView createCustomer(@ModelAttribute CustomerDTO customerDTO){
         ModelAndView modelAndView = new ModelAndView("admin/customer/edit");
         modelAndView.addObject("customerEdit",customerDTO);
+        modelAndView.addObject("transactionType", Transaction.getTransactionType());
         modelAndView.addObject("status", Status.getStatus());
         return modelAndView;
     }
@@ -52,6 +60,7 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView("admin/customer/edit");
         CustomerDTO customerDTO = customerService.findCustomerById(id);
         modelAndView.addObject("customerEdit",customerDTO);
+        modelAndView.addObject("transactionType", Transaction.getTransactionType());
 //        if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
 //            Long staffId = SecurityUtils.getPrincipal().getId();
 //            if(!buildingService.checkAssignedStaff(id, staffId)){
@@ -60,6 +69,10 @@ public class CustomerController {
 //            }
 //        }
         modelAndView.addObject("status", Status.getStatus());
+        List<TransactionEntity> CSKH = transactionService.getTransactionByCodeAndCustomerId("CSKH",id);
+        List<TransactionEntity> DDX = transactionService.getTransactionByCodeAndCustomerId("DDX",id);
+        modelAndView.addObject("CSKH",CSKH);
+        modelAndView.addObject("DDX",DDX);
         return modelAndView;
     }
 }

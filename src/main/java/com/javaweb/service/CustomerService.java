@@ -22,4 +22,5 @@ public interface CustomerService {
     CustomerEntity updateCustomer(CustomerDTO customerDTO);
     String delete(List<Long> ids);
     List<StaffResponseDTO> findAssignedStaffs(Long id);
+    CustomerEntity findById(Long id);
 }

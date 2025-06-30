@@ -10,6 +10,7 @@ import com.javaweb.model.response.CustomerSearchResponse;
 import com.javaweb.model.response.StaffResponseDTO;
 import com.javaweb.repository.AssignmentCustomerRepository;
 import com.javaweb.repository.CustomerRepository;
+import com.javaweb.repository.TransactionRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,9 @@ public class CustomerServiceImpl implements CustomerService {
     private UserService userService;
 
     @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
     private AssignmentCustomerRepository assignmentCustomerRepository;
 
     @Override
@@ -52,6 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest) {
+        customerSearchRequest.setIs_Active(1L);
         List<CustomerEntity> customerEntities = customerRepository.searchCustomers(customerSearchRequest);
         List<CustomerSearchResponse> results = new ArrayList<>();
         for (CustomerEntity customerEntity : customerEntities) {
@@ -70,6 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerEntity createCustomer(CustomerDTO customerDTO) {
+        customerDTO.setIs_Active(1L);
         CustomerEntity customerEntity = customerConverter.customerEntity(customerDTO);
         customerRepository.save(customerEntity);
         return customerEntity;
@@ -79,21 +86,19 @@ public class CustomerServiceImpl implements CustomerService {
     public void contactUser(CustomerDTO customerDTO){
        CustomerEntity customerEntity = customerConverter.customerEntity(customerDTO);
        customerEntity.setStatus("Chưa xử lý");
-       customerEntity.setIsActive(true);
-//       // Set default email if null
-//       if (customerEntity.getEmail() == null || customerEntity.getEmail().trim().isEmpty()) {
-//           customerEntity.setEmail(customerDTO.getEmail());
-//       }
-//       // Set default demand if null
-//       if (customerEntity.getDemand() == null || customerEntity.getDemand().trim().isEmpty()) {
-//           customerEntity.setDemand("Không có nội dung");
-//       }
+       customerEntity.setIs_Active(1L);
        customerRepository.save(customerEntity);
     }
 
     @Override
     public CustomerEntity updateCustomer(CustomerDTO customerDTO){
+        customerDTO.setIs_Active(1L);
+        CustomerEntity customer = customerRepository.findById(customerDTO.getId()).get();
+        Date createdDate = customer.getCreatedDate();
+        String createdBy = customer.getCreatedBy();
         CustomerEntity customerEntity = customerConverter.customerEntity(customerDTO);
+        customerEntity.setCreatedDate(createdDate);
+        customerEntity.setCreatedBy(createdBy);
         customerRepository.save(customerEntity);
         return customerEntity;
     }
@@ -103,7 +108,13 @@ public class CustomerServiceImpl implements CustomerService {
     public String delete(List<Long> ids) {
         List<AssignmentCustomerEntity> assignments = assignmentCustomerRepository.findByCustomersIdIn(ids);
         assignmentCustomerRepository.deleteAll(assignments);
-        customerRepository.deleteAllByIdIn(ids);
+        for (Long id:ids){
+            CustomerEntity customerEntity = customerRepository.findById(id).get();
+            customerEntity.setIs_Active(0L);
+            customerRepository.save(customerEntity);
+            transactionRepository.deleteByCustomerEntity_Id(id);
+        }
+//        customerRepository.deleteAllByIdIn(ids);
         return "Success";
     }
 
@@ -125,5 +136,10 @@ public class CustomerServiceImpl implements CustomerService {
             staffResponseDTOS.add(staffResponseDTO);
         }
         return staffResponseDTOS;
+    }
+
+    @Override
+    public CustomerEntity findById(Long id) {
+        return customerRepository.findById(id).get();
     }
 }

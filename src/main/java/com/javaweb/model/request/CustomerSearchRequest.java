@@ -11,5 +11,6 @@ public class CustomerSearchRequest {
     private String email;
     private String status;
     private Long staffId;
+    private Long is_Active;
 
 }

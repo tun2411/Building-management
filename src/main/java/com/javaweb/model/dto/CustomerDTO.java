@@ -19,4 +19,5 @@ public class CustomerDTO extends AbstractDTO{
     private String status;
     private long staffId;
     private String companyName;
+    private Long is_Active;
 }

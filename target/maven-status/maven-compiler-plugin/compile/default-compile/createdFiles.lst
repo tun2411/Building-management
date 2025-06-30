@@ -1,7 +1,10 @@
 com\javaweb\model\dto\CustomerDTO.class
 com\javaweb\api\admin\RegisterAPI.class
 com\javaweb\repository\BuildingRepository.class
+com\javaweb\api\admin\TransactionAPI.class
 com\javaweb\converter\BuildingConverter.class
+com\javaweb\model\dto\TransactionDTO.class
+com\javaweb\service\ITransactionService.class
 com\javaweb\api\admin\AssignmentBuildingAPI.class
 com\javaweb\entity\BuildingEntity.class
 com\javaweb\config\JpaAuditingConfig$AuditorAwareImpl.class
@@ -17,9 +20,11 @@ com\javaweb\entity\RentAreaEntity.class
 com\javaweb\entity\CustomerEntity.class
 com\javaweb\model\dto\UserDTO.class
 com\javaweb\exception\MyException.class
+com\javaweb\repository\TransactionRepository.class
 com\javaweb\repository\RentAreaRepository.class
 com\javaweb\converter\RoleConverter.class
 com\javaweb\service\impl\RoleService.class
+com\javaweb\enums\Transaction.class
 com\javaweb\converter\CustomerConverter.class
 com\javaweb\entity\UserEntity.class
 com\javaweb\utils\StringUtils.class
@@ -27,6 +32,7 @@ com\javaweb\entity\TransactionEntity.class
 com\javaweb\utils\NumberUtils.class
 com\javaweb\security\utils\SecurityUtils.class
 com\javaweb\service\impl\BuildingServiceImpl.class
+com\javaweb\service\impl\TransactionServiceImpl.class
 com\javaweb\controller\web\HomeController.class
 com\javaweb\model\response\StaffResponseDTO.class
 com\javaweb\config\ModelMapperConfig.class
@@ -77,6 +83,7 @@ com\javaweb\converter\UserConverter.class
 com\javaweb\constant\SystemConstant.class
 com\javaweb\model\response\BuildingSearchResponse.class
 com\javaweb\controller\admin\HomeController.class
+com\javaweb\converter\TransactionConverter.class
 com\javaweb\service\impl\AssignmentCustomerServiceImpl.class
 com\javaweb\model\response\ResponseDTO.class
 com\javaweb\config\WebSecurityConfig.class

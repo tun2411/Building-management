@@ -35,7 +35,7 @@ public class CustomerEntity extends BaseEntity{
     private String status;
 
     @Column(name = "is_active")
-    private Boolean isActive;
+    private Long is_Active;
 
     @OneToMany(mappedBy = "customers")
     @JsonManagedReference
