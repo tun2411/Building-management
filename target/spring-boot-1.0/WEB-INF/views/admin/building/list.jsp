@@ -180,7 +180,7 @@
                     </div>
                   </div>
                 </div>
-              </form:form>
+<%--              </form:form>--%>
 
 
             </div>
@@ -250,93 +250,60 @@
           <br>
           <div class="hr hr-20 hr-double"></div>
           <br>
-          <table
-                  id="buildingList"
-                  class="table table-striped table-bordered table-hover"
+          <display:table name="${model.listResult}"
+                         class="table table-striped table-bordered table-hover"
+                         id="tableList"
+                         size="${model.totalItems}"
+                         requestURI="/admin/building-list"
+                         pagesize="${model.maxPageItems}"
+                         partialList="true"
+                         export="false"
           >
-            <thead>
-            <tr>
-              <th class="center">
-                <label class="pos-rel">
-                  <span class="lbl"></span>
-                </label>
-              </th>
-              <th>Tên toà nhà</th>
-              <th>Địa chỉ</th>
-              <th>Số tầng hầm</th>
-
-              <th>Tên quản lý</th>
-              <th>SĐT quản lý</th>
-
-              <th>Diện tích sàn</th>
-              <th>Diện tích thuê</th>
-              <th>Diện tích trống</th>
-              <th>Giá thuê</th>
-              <th>Phí dịch vụ</th>
-              <th>Phí môi giới</th>
-              <th>Thao tác</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <c:forEach var = "building" items="${buildingSearchResponses}">
-              <tr>
-                <td class="center">
-                  <label class="pos-rel">
-                    <input type="checkbox" class="ace" value="${building.id}" />
-                    <span class="lbl"></span>
-                  </label>
-                </td>
-
-                <td>${building.name}</td>
-                <td>${building.address}</td>
-                <td>${building.numberOfBasement}</td>
-                <td>${building.managerName}</td>
-
-                <td>${building.managerPhone}</td>
-                <td>${building.floorArea}</td>
-                <td>${building.rentArea}</td>
-                <td></td>
-                <td>${building.rentPrice}</td>
-                <td>${building.serviceFee}</td>
-                <td>${building.brokerageFee}</td>
-
-                <td>
-                  <div
-                          class="hidden-sm hidden-xs btn-group"
-                          bis_skin_checked="1"
+            <display:column title="">
+              <label class="pos-rel">
+                <input type="checkbox" class="ace" value="${tableList.id}" />
+                <span class="lbl"></span>
+              </label>
+            </display:column>
+            <display:column title="Tên toà nhà" property="name"/>
+            <display:column title="Địa chỉ" property="address"/>
+            <display:column title="Số tầng hầm" property="numberOfBasement"/>
+            <display:column title="Tên quản lý" property="managerName"/>
+            <display:column title="SĐT quản lý" property="managerPhone"/>
+            <display:column title="Diện tích sàn" property="floorArea"/>
+            <display:column title="Diện tích thuê" property="rentArea"/>
+            <display:column title="Diện tích trống" property="emptyArea"/>
+            <display:column title="Giá thuê" property="rentPrice"/>
+            <display:column title="Phí dịch vụ" property="serviceFee"/>
+            <display:column title="Phí môi giới" property="brokerageFee"/>
+            <display:column title="Thao tác">
+              <div class="hidden-sm hidden-xs btn-group" bis_skin_checked="1">
+                <security:authorize access="hasRole('MANAGER')">
+                  <button style="width: 24px;height: 24px;border:none"
+                          class="btn btn-xs btn-success"
+                          onclick="assignmentBuilding(${tableList.id})" title = "Giao toà nhà"
                   >
-                    <security:authorize access="hasRole('MANAGER')">
-                      <button style="width: 24px;height: 24px;border:none"
-                              class="btn btn-xs btn-success"
-                              onclick="assignmentBuilding(${building.id})" title = "Giao toà nhà"
-                      >
-                        <i class="ace-icon fa fa-users bigger-120"></i>
-                      </button>
-                    </security:authorize>
+                    <i class="ace-icon fa fa-users bigger-120"></i>
+                  </button>
+                </security:authorize>
+                <a href="/admin/building-edit-${tableList.id}" style="width: 24px;height: 24px;border:none"
+                   class="btn btn-xs btn-info" title="Sửa thông tin">
+                  <i class="ace-icon fa fa-pencil bigger-120"></i>
+                </a>
 
+                <button style="width: 24px;height: 24px;border:none"
+                        class="btn btn-xs btn-danger"
+                        onclick="deleteBuilding(${tableList.id})" title="Xoá toà nhà"
+                >
+                  <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                </button>
 
-                    <a href="/admin/building-edit-${building.id} " style="width: 24px;height: 24px;border:none"
-                       class="btn btn-xs btn-info" title="Sửa thông tin">
-                      <i class="ace-icon fa fa-pencil bigger-120"></i>
-                    </a>
+              </div>
 
-                    <button style="width: 24px;height: 24px;border:none"
-                            class="btn btn-xs btn-danger"
-                            onclick="deleteBuilding(${building.id})" title="Xoá toà nhà"
-                    >
-                      <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                    </button>
+            </display:column>
 
-
-
-                  </div>
-                </td>
-              </tr>
-            </c:forEach>
-
-            </tbody>
-          </table>
+          </display:table>
+          </form:form>
         </div>
         <!-- /.span -->
       </div>

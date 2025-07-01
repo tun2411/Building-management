@@ -61,10 +61,5 @@ public class BuildingDTO extends AbstractDTO{
         }
         return null;
     }
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
-    }
-
-
 
 }

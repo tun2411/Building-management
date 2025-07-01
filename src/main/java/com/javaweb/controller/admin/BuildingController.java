@@ -11,13 +11,16 @@ import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.IUserService;
 import com.javaweb.service.BuildingService;
+import com.javaweb.utils.DisplayTagUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller(value="buildingControllerOfAdmin")
@@ -30,8 +33,10 @@ public class BuildingController {
     private IUserService userService;
 
     @GetMapping("/admin/building-list")
-    public ModelAndView getAllBuilding(@ModelAttribute BuildingSearchRequest buildingSearchRequest){
+    public ModelAndView getAllBuilding(@ModelAttribute(SystemConstant.MODEL) BuildingSearchRequest buildingSearchRequest, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView("admin/building/list");
+
+        DisplayTagUtils.of(request,buildingSearchRequest);
         if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
             Long staffId = SecurityUtils.getPrincipal().getId();
             buildingSearchRequest.setStaffId(staffId);
@@ -40,9 +45,13 @@ public class BuildingController {
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
-        List<BuildingSearchResponse> responseList1 = buildingService.searchBuildings(buildingSearchRequest);
-        modelAndView.addObject("buildingSearchResponses",responseList1);
-
+        List<BuildingSearchResponse> responseList1 = buildingService.searchBuildings(buildingSearchRequest, PageRequest.of(buildingSearchRequest.getPage()-1,buildingSearchRequest.getMaxPageItems()));
+        buildingSearchRequest.setListResult(responseList1);
+        int totalItems = buildingService.countTotalItems(buildingSearchRequest);
+        buildingSearchRequest.setTotalItems(totalItems);
+//      modelAndView.addObject("buildingSearchResponses",responseList1);
+        modelAndView.addObject(SystemConstant.MODEL,buildingSearchRequest);
+        System.out.println(totalItems);
         return modelAndView;
     }
 

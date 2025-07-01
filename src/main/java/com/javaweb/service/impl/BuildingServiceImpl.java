@@ -9,6 +9,9 @@ import com.javaweb.model.dto.BuildingDTO;
 import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.StaffResponseDTO;
+import com.javaweb.utils.UploadFileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.data.domain.Pageable;
 import com.javaweb.repository.AssignmentBuildingRepository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.RentAreaRepository;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,14 +50,17 @@ public class BuildingServiceImpl implements BuildingService {
     private UserService userService;
 
     @Autowired
+    private UploadFileUtils uploadFileUtils;
+
+    @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<BuildingSearchResponse> searchBuildings(BuildingSearchRequest buildingSearchRequest) {
-        List<BuildingEntity> buildingEntities = buildingRepository.searchBuildings(buildingSearchRequest);
+    public List<BuildingSearchResponse> searchBuildings(BuildingSearchRequest buildingSearchRequest, Pageable pageable) {
+        List<BuildingEntity> buildingEntities = buildingRepository.searchBuildings(buildingSearchRequest,pageable);
         List<BuildingSearchResponse> results = new ArrayList<>();
         for (BuildingEntity buildingEntity : buildingEntities) {
             BuildingSearchResponse buildingResponse = buildingConverter.toBuildingSearchResponse(buildingEntity);
@@ -106,6 +113,7 @@ public class BuildingServiceImpl implements BuildingService {
     public BuildingEntity createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
         buildingRepository.save(buildingEntity);
+        saveThumbnail(buildingDTO,buildingEntity);
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -121,8 +129,11 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public BuildingEntity updateBuilding(BuildingDTO buildingDTO){
+        BuildingEntity entity = buildingRepository.findById(buildingDTO.getId()).get();
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
+        buildingEntity.setAvatar(entity.getAvatar());
         buildingRepository.save(buildingEntity);
+        saveThumbnail(buildingDTO,buildingEntity);
         rentAreaRepository.deleteAll(buildingEntity.getRentAreaEntity());
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
@@ -151,5 +162,26 @@ public class BuildingServiceImpl implements BuildingService {
                     UserEntity staff = assignment.getStaff();
                     return staff != null && Objects.equals(staff.getId(), staffId);
                 });
+    }
+
+    @Override
+    public int countTotalItems(BuildingSearchRequest buildingSearchRequest) {
+        return buildingRepository.countTotalItem(buildingSearchRequest);
+    }
+
+    @Override
+    public void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
+        String path = "/building/" + buildingDTO.getImageName();
+        if (null != buildingDTO.getImageBase64()) {
+            if (null != buildingEntity.getAvatar()) {
+                if (!path.equals(buildingEntity.getAvatar())) {
+                    File file = new File("C://home/office" + buildingEntity.getAvatar());
+                    file.delete();
+                }
+            }
+            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            uploadFileUtils.writeOrUpdate(path, bytes);
+            buildingEntity.setAvatar(path);
+        }
     }
 }

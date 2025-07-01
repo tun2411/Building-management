@@ -222,6 +222,24 @@
                             <form:input class="form-control" path="note" />
                         </div>
                     </div>
+
+                    <div class="form-group" bis_skin_checked="1">
+                        <label class="col-sm-3 control-label">Hình đại diện</label>
+<%--                        <input class="col-sm-3 control-label" type="file" id="uploadImage"/>--%>
+                        <div class="col-sm-9">
+                            <form:input class="col-sm-3" type="file" id="uploadImage" path="image" />
+                            <br>
+                            <br>
+                            <c:if test="${not empty buildingEdit.image}">
+                                <c:set var="imagePath" value="/repository${buildingEdit.image}"/>
+                                <img src="${imagePath}" id="viewImage" width="300px" height="300px" style="margin-top: 50px">
+                            </c:if>
+                            <c:if test="${empty buildingEdit.image}">
+                                <img src="/admin/image/default.png" id="viewImage" width="300px" height="300px">
+                            </c:if>
+                        </div>
+                    </div>
+
                     <div class="form-group" bis_skin_checked="1">
                         <label class="col-xs-3 control-label"></label>
                         <div class="col-xs-9">
@@ -353,6 +371,45 @@
             },
         });
     }
+
+
+
+    var imageBase64 = '';
+    var imageName = '';
+    // $.each(formData, function (i, e) {
+    //     if ('' !== e.value && null != e.value) {
+    //         data['' + e.name + ''] = e.value;
+    //     }
+    //
+    //     if ('' !== imageBase64) {
+    //         data['imageBase64'] = imageBase64;
+    //         data['imageName'] = imageName;
+    //     }
+    // });
+    $('#uploadImage').change(function (event) {
+        var reader = new FileReader();
+        var file = $(this)[0].files[0];
+        reader.onload = function (e) {
+            imageBase64 = e.target.result;
+            imageName = file.name.replace(/\s+/g, '-').toLowerCase();
+        };
+        reader.readAsDataURL(file);
+        openImage(this, "viewImage");
+    });
+
+        function openImage(input, imageView) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#' + imageView).attr('src', reader.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+
+
 </script>
 </body>
 </html>
