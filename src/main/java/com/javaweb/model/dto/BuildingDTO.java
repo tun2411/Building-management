@@ -48,7 +48,7 @@ public class BuildingDTO extends AbstractDTO{
     private Long rentPrice;
     private String serviceFee;
     private Float brokerageFee;
-    private String image;
+    private String avatar;
     private String imageBase64;
     private String imageName;
 

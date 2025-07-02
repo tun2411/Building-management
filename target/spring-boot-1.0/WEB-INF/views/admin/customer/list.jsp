@@ -167,82 +167,62 @@
           <br>
           <div class="hr hr-20 hr-double"></div>
           <br>
-          <table
-                  id="customerList"
-                  class="table table-striped table-bordered table-hover"
+          <display:table name="${model.listResult}"
+                         class="table table-striped table-bordered table-hover"
+                         id="tableList"
+                         size="${model.totalItems}"
+                         requestURI="/admin/customer-list"
+                         pagesize="${model.maxPageItems}"
+                         partialList="true"
+                         export="false"
           >
-            <thead>
-            <tr>
-              <th class="center">
-                <label class="pos-rel">
-                  <span class="lbl"></span>
-                </label>
-              </th>
-              <th>Tên khách hàng</th>
-              <th>Di động</th>
-              <th>Email</th>
-              <th>Nhu cầu</th>
-              <th>Người thêm</th>
-              <th>Ngày thêm</th>
-              <th>Tình trạng</th>
-              <th>Thao tác</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <c:forEach var = "customer" items="${customerSearchResponses}">
-              <tr>
-                <td class="center">
-                  <label class="pos-rel">
-                    <input type="checkbox" class="ace" value="${customer.id}" />
-                    <span class="lbl"></span>
-                  </label>
-                </td>
-
-                <td>${customer.fullName}</td>
-                <td>${customer.phone}</td>
-                <td>${customer.email}</td>
-                <td>${customer.demand}</td>
-
-                <td>${customer.createdBy}</td>
-                <td>${customer.createdDate}</td>
-                <td>${customer.status}</td>
-                <td>
-                  <div
-                          class="hidden-sm hidden-xs btn-group"
-                          bis_skin_checked="1"
+            <display:column title="">
+              <label class="pos-rel">
+                <input type="checkbox" class="ace" value="${tableList.id}" />
+                <span class="lbl"></span>
+              </label>
+            </display:column>
+            <display:column title="Tên khách hàng" property="fullName"/>
+            <display:column title="Di động" property="phone"/>
+            <display:column title="Email" property="email"/>
+            <display:column title="Nhu cầu" property="demand"/>
+            <display:column title="Người thêm" property="createdBy"/>
+            <display:column title="Ngày thêm" property="createdDate"/>
+            <display:column title="Tình trạng" property="status"/>
+            <display:column title="Thao tác">
+              <div
+                      class="hidden-sm hidden-xs btn-group"
+                      bis_skin_checked="1"
+              >
+                <security:authorize access="hasRole('MANAGER')">
+                  <button style="width: 24px;height: 24px;border:none"
+                          class="btn btn-xs btn-success"
+                          onclick="assignmentCustomer(${tableList.id})" title = "Giao người dùng"
                   >
-                    <security:authorize access="hasRole('MANAGER')">
-                      <button style="width: 24px;height: 24px;border:none"
-                              class="btn btn-xs btn-success"
-                              onclick="assignmentCustomer(${customer.id})" title = "Giao người dùng"
-                      >
-                        <i class="ace-icon fa fa-users bigger-120"></i>
-                      </button>
-                    </security:authorize>
+                    <i class="ace-icon fa fa-users bigger-120"></i>
+                  </button>
+                </security:authorize>
 
 
-                    <a href="/admin/customer-edit-${customer.id} " style="width: 24px;height: 24px;border:none"
-                       class="btn btn-xs btn-info" title="Sửa thông tin">
-                      <i class="ace-icon fa fa-pencil bigger-120"></i>
-                    </a>
+                <a href="/admin/customer-edit-${tableList.id} " style="width: 24px;height: 24px;border:none"
+                   class="btn btn-xs btn-info" title="Sửa thông tin">
+                  <i class="ace-icon fa fa-pencil bigger-120"></i>
+                </a>
 
-                      <security:authorize access="hasRole('MANAGER')">
-                          <button style="width: 24px;height: 24px;border:none"
-                                  class="btn btn-xs btn-danger"
-                                  onclick="deleteCustomer(${customer.id})" title="Xoá người dùng"
-                          >
-                              <i class="ace-icon fa fa-trash-o bigger-120"></i>
-                          </button>
-                      </security:authorize>
+                <security:authorize access="hasRole('MANAGER')">
+                  <button style="width: 24px;height: 24px;border:none"
+                          class="btn btn-xs btn-danger"
+                          onclick="deleteCustomer(${tableList.id})" title="Xoá người dùng"
+                  >
+                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                  </button>
+                </security:authorize>
 
-                  </div>
-                </td>
-              </tr>
-            </c:forEach>
+              </div>
 
-            </tbody>
-          </table>
+            </display:column>
+
+          </display:table>
         </div>
         <!-- /.span -->
       </div>

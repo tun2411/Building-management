@@ -50,9 +50,6 @@ public class BuildingServiceImpl implements BuildingService {
     private UserService userService;
 
     @Autowired
-    private UploadFileUtils uploadFileUtils;
-
-    @Autowired
     private AssignmentBuildingRepository assignmentBuildingRepository;
 
     @PersistenceContext
@@ -112,8 +109,8 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public BuildingEntity createBuilding(BuildingDTO buildingDTO) {
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
-        buildingRepository.save(buildingEntity);
         saveThumbnail(buildingDTO,buildingEntity);
+        buildingRepository.save(buildingEntity);
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -132,8 +129,8 @@ public class BuildingServiceImpl implements BuildingService {
         BuildingEntity entity = buildingRepository.findById(buildingDTO.getId()).get();
         BuildingEntity buildingEntity = buildingConverter.toBuildingEntity(buildingDTO);
         buildingEntity.setAvatar(entity.getAvatar());
+        saveThumbnail(buildingDTO, buildingEntity);
         buildingRepository.save(buildingEntity);
-        saveThumbnail(buildingDTO,buildingEntity);
         rentAreaRepository.deleteAll(buildingEntity.getRentAreaEntity());
         List<Long> rentAreas = Arrays.stream(buildingDTO.getRentArea().split(","))
                 .map(String::trim)
@@ -172,14 +169,14 @@ public class BuildingServiceImpl implements BuildingService {
     @Override
     public void saveThumbnail(BuildingDTO buildingDTO, BuildingEntity buildingEntity) {
         String path = "/building/" + buildingDTO.getImageName();
-        if (null != buildingDTO.getImageBase64()) {
-            if (null != buildingEntity.getAvatar()) {
-                if (!path.equals(buildingEntity.getAvatar())) {
+        String imageBase64 = buildingDTO.getImageBase64();
+        if (imageBase64 != null) {
+            if (buildingEntity.getAvatar() != null && !path.equals(buildingEntity.getAvatar())) {
                     File file = new File("C://home/office" + buildingEntity.getAvatar());
                     file.delete();
-                }
             }
-            byte[] bytes = Base64.decodeBase64(buildingDTO.getImageBase64().getBytes());
+            byte[] bytes = Base64.decodeBase64(imageBase64);
+            UploadFileUtils uploadFileUtils = new UploadFileUtils();
             uploadFileUtils.writeOrUpdate(path, bytes);
             buildingEntity.setAvatar(path);
         }

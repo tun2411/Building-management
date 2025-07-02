@@ -226,14 +226,14 @@
                     <div class="form-group" bis_skin_checked="1">
                         <label class="col-sm-3 control-label">Hình đại diện</label>
                         <div class="col-sm-9">
-                            <form:input class="col-sm-3" type="file" id="uploadImage" path="image" />
+                            <form:input class="col-sm-3" type="file" id="uploadImage" path="avatar" />
                             <br>
                             <br>
-                            <c:if test="${not empty buildingEdit.image}">
-                                <c:set var="imagePath" value="/repository${buildingEdit.image}"/>
+                            <c:if test="${not empty buildingEdit.avatar}">
+                                <c:set var="imagePath" value="/repository${buildingEdit.avatar}"/>
                                 <img src="${imagePath}" id="viewImage" width="300px" height="300px" style="margin-top: 50px">
                             </c:if>
-                            <c:if test="${empty buildingEdit.image}">
+                            <c:if test="${empty buildingEdit.avatar}">
                                 <img src="/admin/image/default.png" id="viewImage" width="300px" height="300px">
                             </c:if>
                         </div>
@@ -318,7 +318,12 @@
         });
         json['typeCode'] = typeCode;
         json['id'] = $('#id').val();
-        console.log("Oke");
+
+        if (imageBase64 !== '') {
+            json['imageBase64'] = imageBase64;
+            json['imageName'] = imageName;
+        }
+
         ok=1;
         validateDataBuilding(json);
         if(ok === 0){
@@ -329,7 +334,6 @@
             }else{
                 updateBuilding(json);
             }
-
         }
     });
 
@@ -375,25 +379,15 @@
 
     var imageBase64 = '';
     var imageName = '';
-    // $.each(formData, function (i, e) {
-    //     if ('' !== e.value && null != e.value) {
-    //         data['' + e.name + ''] = e.value;
-    //     }
-    //
-    //     if ('' !== imageBase64) {
-    //         data['imageBase64'] = imageBase64;
-    //         data['imageName'] = imageName;
-    //     }
-    // });
     $('#uploadImage').change(function (event) {
         var reader = new FileReader();
         var file = $(this)[0].files[0];
-        reader.onload = function (e) {
-            imageBase64 = e.target.result;
-            imageName = file.name.replace(/\s+/g, '-').toLowerCase();
-        };
-        reader.readAsDataURL(file);
-        openImage(this, "viewImage");
+            reader.onload = function (e) {
+                imageBase64 = e.target.result; // chỉ lấy phần base64
+                imageName = file.name.replace(/\s+/g, '-').toLowerCase();
+            };
+            reader.readAsDataURL(file);
+            openImage(this, "viewImage");
     });
 
         function openImage(input, imageView) {

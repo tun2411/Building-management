@@ -11,13 +11,16 @@ import com.javaweb.security.utils.SecurityUtils;
 import com.javaweb.service.CustomerService;
 import com.javaweb.service.ITransactionService;
 import com.javaweb.service.IUserService;
+import com.javaweb.utils.DisplayTagUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller(value="customerControllerOfAdmin")
@@ -33,8 +36,9 @@ public class CustomerController {
     private IUserService userService;
 
     @GetMapping("/admin/customer-list")
-    public ModelAndView getAllCustomer(@ModelAttribute CustomerSearchRequest customerSearchRequest){
+    public ModelAndView getAllCustomer(@ModelAttribute(SystemConstant.MODEL) CustomerSearchRequest customerSearchRequest, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView("admin/customer/list");
+        DisplayTagUtils.of(request,customerSearchRequest);
         if(SecurityUtils.getAuthorities().contains(SystemConstant.ADMIN_ROLE)){
             Long staffId = SecurityUtils.getPrincipal().getId();
             customerSearchRequest.setStaffId(staffId);
@@ -43,8 +47,11 @@ public class CustomerController {
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("status", Status.getStatus());
         customerSearchRequest.setIs_Active(1L);
-        List<CustomerSearchResponse> responseList = customerService.searchCustomers(customerSearchRequest);
+        List<CustomerSearchResponse> responseList = customerService.searchCustomers(customerSearchRequest, PageRequest.of(customerSearchRequest.getPage()-1,customerSearchRequest.getMaxPageItems()));
+        customerSearchRequest.setListResult(responseList);
+        customerSearchRequest.setTotalItems(customerService.countTotalItems(customerSearchRequest));
         modelAndView.addObject("customerSearchResponses",responseList);
+        modelAndView.addObject(SystemConstant.MODEL,customerSearchRequest);
         return modelAndView;
     }
 

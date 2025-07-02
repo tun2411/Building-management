@@ -6,6 +6,7 @@ import com.javaweb.model.request.BuildingSearchRequest;
 import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.repository.custom.CustomerRepositoryCustom;
 import com.javaweb.utils.StringUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -61,16 +62,28 @@ public class CustomerRepositoryImpl implements CustomerRepositoryCustom {
 
 
     @Override
-    public List<CustomerEntity> searchCustomers(CustomerSearchRequest customerSearchRequest) {
+    public List<CustomerEntity> searchCustomers(CustomerSearchRequest customerSearchRequest, Pageable pageable) {
         StringBuilder sql = new StringBuilder("SELECT DISTINCT cus.* FROM customer cus ");
         sql.append(buildJoin(customerSearchRequest));
         sql.append(buildWhere(customerSearchRequest));
         sql.append(" GROUP BY cus.id ");
         sql.append("ORDER BY cus.createddate DESC ");
+        sql.append(" LIMIT ").append(pageable.getPageSize());
+        sql.append(" OFFSET ").append(pageable.getOffset());
         System.out.print(sql);
         Query query = entityManager.createNativeQuery(sql.toString(), CustomerEntity.class);
         List<CustomerEntity> T = query.getResultList();
         return T;
+    }
+
+    @Override
+    public int countTotalItem(CustomerSearchRequest request) {
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT cus.* FROM customer cus ");
+        sql.append(buildJoin(request));
+        sql.append(buildWhere(request));
+        Query query = entityManager.createNativeQuery(sql.toString(), CustomerEntity.class);
+        List<CustomerEntity> T = query.getResultList();
+        return T.size();
     }
 
 }

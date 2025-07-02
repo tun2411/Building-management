@@ -14,6 +14,7 @@ import com.javaweb.repository.TransactionRepository;
 import com.javaweb.repository.UserRepository;
 import com.javaweb.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,9 +54,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest) {
+    public List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest, Pageable pageable) {
         customerSearchRequest.setIs_Active(1L);
-        List<CustomerEntity> customerEntities = customerRepository.searchCustomers(customerSearchRequest);
+        List<CustomerEntity> customerEntities = customerRepository.searchCustomers(customerSearchRequest,pageable);
         List<CustomerSearchResponse> results = new ArrayList<>();
         for (CustomerEntity customerEntity : customerEntities) {
             CustomerSearchResponse customerResponse = customerConverter.toCustomerSearchResponse(customerEntity);
@@ -144,6 +145,11 @@ public class CustomerServiceImpl implements CustomerService {
             staffResponseDTOS.add(staffResponseDTO);
         }
         return staffResponseDTOS;
+    }
+
+    @Override
+    public int countTotalItems(CustomerSearchRequest customerSearchRequest) {
+        return customerRepository.countTotalItem(customerSearchRequest);
     }
 
     @Override

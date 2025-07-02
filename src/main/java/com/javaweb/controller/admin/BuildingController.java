@@ -45,11 +45,10 @@ public class BuildingController {
         modelAndView.addObject("staffs",userService.getStaffs());
         modelAndView.addObject("district", District.getDistrict());
         modelAndView.addObject("type", RentType.getType());
-        List<BuildingSearchResponse> responseList1 = buildingService.searchBuildings(buildingSearchRequest, PageRequest.of(buildingSearchRequest.getPage()-1,buildingSearchRequest.getMaxPageItems()));
-        buildingSearchRequest.setListResult(responseList1);
+        List<BuildingSearchResponse> responseList = buildingService.searchBuildings(buildingSearchRequest, PageRequest.of(buildingSearchRequest.getPage()-1,buildingSearchRequest.getMaxPageItems()));
+        buildingSearchRequest.setListResult(responseList);
         int totalItems = buildingService.countTotalItems(buildingSearchRequest);
         buildingSearchRequest.setTotalItems(totalItems);
-//      modelAndView.addObject("buildingSearchResponses",responseList1);
         modelAndView.addObject(SystemConstant.MODEL,buildingSearchRequest);
         System.out.println(totalItems);
         return modelAndView;

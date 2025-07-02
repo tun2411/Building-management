@@ -180,7 +180,7 @@
                     </div>
                   </div>
                 </div>
-<%--              </form:form>--%>
+              </form:form>
 
 
             </div>
@@ -189,7 +189,7 @@
 
           <div style="padding-right: 20px" class="pull-right">
             <br>
-            <a href="/admin/building-edit">
+            <a href="${pageContext.request.contextPath}/admin/building-edit">
               <button
                       class="btn btn-app btn-success btn-xs"
                       title="Thêm toà nhà"
@@ -303,7 +303,7 @@
             </display:column>
 
           </display:table>
-          </form:form>
+<%--          </form:form>--%>
         </div>
         <!-- /.span -->
       </div>

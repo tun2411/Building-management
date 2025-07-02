@@ -9,11 +9,12 @@ import com.javaweb.model.request.CustomerSearchRequest;
 import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.model.response.CustomerSearchResponse;
 import com.javaweb.model.response.StaffResponseDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface CustomerService {
-    List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest);
+    List<CustomerSearchResponse> searchCustomers(CustomerSearchRequest customerSearchRequest, Pageable pageable);
     boolean existsByPhone(String phone, Long id);
     boolean existsByEmail(String email, Long id);
     void contactUser(CustomerDTO customerDTO);
@@ -22,6 +23,7 @@ public interface CustomerService {
     CustomerEntity updateCustomer(CustomerDTO customerDTO);
     String delete(List<Long> ids);
     List<StaffResponseDTO> findAssignedStaffs(Long id);
+    int countTotalItems(CustomerSearchRequest customerSearchRequest);
     CustomerEntity findById(Long id);
     boolean checkAssignedStaff(Long customerId, Long staffId);
 }
