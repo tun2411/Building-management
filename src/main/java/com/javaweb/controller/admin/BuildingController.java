@@ -1,7 +1,5 @@
 package com.javaweb.controller.admin;
 
-
-
 import com.javaweb.constant.SystemConstant;
 import com.javaweb.enums.District;
 import com.javaweb.enums.RentType;
@@ -50,7 +48,7 @@ public class BuildingController {
         int totalItems = buildingService.countTotalItems(buildingSearchRequest);
         buildingSearchRequest.setTotalItems(totalItems);
         modelAndView.addObject(SystemConstant.MODEL,buildingSearchRequest);
-        System.out.println(totalItems);
+//        System.out.println(totalItems);
         return modelAndView;
     }
 
