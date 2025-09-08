@@ -48,7 +48,6 @@ public class BuildingController {
         int totalItems = buildingService.countTotalItems(buildingSearchRequest);
         buildingSearchRequest.setTotalItems(totalItems);
         modelAndView.addObject(SystemConstant.MODEL,buildingSearchRequest);
-//        System.out.println(totalItems);
         return modelAndView;
     }
 
